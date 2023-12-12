@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @OA\Tag(
+ *     name="Auth",
+ *     description="API Endpoints for authentication"
+ * )
+ */
 class AuthController extends Controller
 {
     /**
@@ -15,10 +21,36 @@ class AuthController extends Controller
      * @param Request $request
      * @return User
      */
+
+    /**
+     * @OA\Post(
+     *     path="/api/auth/register",
+     *     tags={"Auth"},
+     *     summary="Register a user",
+     *     description="Registers new user",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "email", "password"},
+     *             @OA\Property(property="name", type="string", description="Full name", example="Test"),
+     *             @OA\Property(property="email", type="string", description="Email address", example="test@example.com"),
+     *             @OA\Property(property="password", type="string", description="Password", example="password")
+     *         )
+     *     ),
+     * @OA\Response(
+     *      response=200,
+     *      description="Successful operation",
+     *      @OA\JsonContent(
+     *          type="object",
+     *          @OA\Property(property="message", type="string", example="User Created Successfully"),
+     *          @OA\Property(property="file_name", type="string", example="9|iwvR6QMeX1s8a83wZFhxvApSbgu7Ee8CJs9N7nR4b05f26e3")
+     *      )
+     *  )
+     * )
+     */
     public function createUser(Request $request)
     {
         try {
-            //Validated
             $validateUser = Validator::make($request->all(),
             [
                 'name' => 'required',
@@ -55,6 +87,32 @@ class AuthController extends Controller
      * Login The User
      * @param Request $request
      * @return User
+     */
+
+     /**
+     * @OA\Post(
+     *     path="/api/auth/login",
+     *     tags={"Auth"},
+     *     summary="Login a user",
+     *     description="Login a user",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email", "password"},
+     *             @OA\Property(property="email", type="string", description="Email address", example="test@example.com"),
+     *             @OA\Property(property="password", type="string", description="Password", example="password")
+     *         )
+     *     ),
+     * @OA\Response(
+     *      response=200,
+     *      description="Successful operation",
+     *      @OA\JsonContent(
+     *          type="object",
+     *          @OA\Property(property="message", type="string", example="User Logged In Successfully"),
+     *          @OA\Property(property="file_name", type="string", example="9|iwvR6QMeX1s8a83wZFhxvApSbgu7Ee8CJs9N7nR4b05f26e3")
+     *      )
+     *  )
+     * )
      */
     public function loginUser(Request $request)
     {
