@@ -6,6 +6,7 @@ use App\Models\Experiment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ExperimentController extends Controller
 {
@@ -14,7 +15,13 @@ class ExperimentController extends Controller
      */
     public function index()
     {
-        return Experiment::all();
+        try{
+            $experiments =  Experiment::all();
+
+            return response()->json(["experiments"=> $experiments], 200);
+        }catch(\Exception $exception){
+            return response()->json(["message"=>"Error - {$exception->getMessage()}"]);
+        }
     }
 
     /**
@@ -45,22 +52,23 @@ class ExperimentController extends Controller
         $originalFileName = $file->getClientOriginalName();
         $filePath = $file->storeAs('experiment_files', $originalFileName);
 
-        $experiment = Experiment::create([
-            'file_name' => $filePath,
-            'context' => $request->input('context'),
-            'output' => $request->input('output'),
-            'save' => $request->input('save', false),
-            // 'created_by' => auth()->id(),
-            'created_by' => 1,
-        ]);
+        // $experiment = Experiment::create([
+        //     'file_name' => $filePath,
+        //     'context' => $request->input('context'),
+        //     'output' => $request->input('output'),
+        //     'save' => $request->input('save', false),
+        //     // 'created_by' => auth()->id(),
+        //     'created_by' => 1,
+        // ]);
 
 
         $scriptCommand = 'loadXcosLibs();loadScicos();importXcosDiagram(\'' . $filePath . '\');Context=struct();scicos_simulate(scs_m,list(),Context,\'nw\');';
-        $script = 'SCRIPT="' . $scriptCommand .'" /usr/bin/ssh -q -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -o "SendEnv=SCRIPT" root@scilab -- /opt/bp-app/run-script.sh 2>&1';
+        $script = 'SCRIPT="' . $scriptCommand .'" /usr/bin/ssh -q -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -o "SendEnv=SCRIPT" root@localhost -- /opt/bp-app/run-script.sh 2>&1';
+        // $script = 'SCRIPT="' . $scriptCommand . '" ';
 
         $result = shell_exec($script);
 
-        return response()->json($result, 201);
+        return response()->json(["simulation"=>$result], 201);
     }
 
     /**
@@ -68,7 +76,17 @@ class ExperimentController extends Controller
      */
     public function show(string $id)
     {
-        return Experiment::findOrFail($id);
+        if(!$id){
+            return response()->json(["message"=>"Invalid id!"], 400);
+        }
+
+        try{
+            $experiment = Experiment::findOrFail($id);
+
+            return response()->json(["experiment"=>$experiment], 200);
+        } catch(\Exception $_){
+            return response()->json(["message"=>"There is no experiment with that id!"], 400);
+        }
     }
 
     /**
@@ -76,11 +94,19 @@ class ExperimentController extends Controller
      */
     public function getSchemaFile($id)
     {
-        $experiment = Experiment::findOrFail($id);
-        $filePath = $experiment->file_name;
-        // $filePath = $experiment->get('file_name');
+        if(!$id){
+            return response()->json(["message"=>"Invalid id!"], 400);
+        }
 
-        return Storage::response($filePath);
+        try{
+            $experiment = Experiment::findOrFail($id);
+            $filePath = $experiment->file_name;
+            // $filePath = $experiment->get('file_name');
+
+            return Storage::response($filePath);
+        } catch(\Exception $_){
+            return response()->json(["message"=>"There is no experiment with that id!"], 400);
+        }
     }
 
     /**
@@ -104,13 +130,24 @@ class ExperimentController extends Controller
      */
     public function destroy(string $id)
     {
-        $experiment = Experiment::findOrFail($id);
-        $filePath = $experiment->file_name;
+        if(!$id){
+            return response()->json(["message"=>"Invalid id!"], 400);
+        }
+        try{
+            $experiment = Experiment::findOrFail($id);
+            $filePath = $experiment->file_name;
 
-        Storage::delete($filePath);
+            try{
+                Storage::delete($filePath);
 
-        $experiment->delete();
+                $experiment->delete();
+            } catch(\Exception $exception){
+                return response()->json(["message"=>"Error - {$exception->getMessage()}"], 500);
+            }
 
-        return response()->json(['message' => 'Experiment deleted successfully']);
+            return response()->json(['message' => 'Experiment deleted successfully'], 200);
+        } catch(\Exception $_){
+            return response()->json(["message"=>"There is no experiment with that id!"], 400);
+        }
     }
 }
