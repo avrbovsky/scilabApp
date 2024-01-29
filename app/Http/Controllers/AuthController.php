@@ -26,7 +26,7 @@ class AuthController extends Controller
      * @OA\Post(
      *     path="/api/auth/register",
      *     tags={"Auth"},
-     *     summary="Register a user",
+     *     summary="Register user",
      *     description="Registers new user",
      *     @OA\RequestBody(
      *         required=true,
@@ -37,15 +37,15 @@ class AuthController extends Controller
      *             @OA\Property(property="password", type="string", description="Password", example="password")
      *         )
      *     ),
-     * @OA\Response(
-     *      response=200,
-     *      description="Successful operation",
-     *      @OA\JsonContent(
-     *          type="object",
-     *          @OA\Property(property="message", type="string", example="User Created Successfully"),
-     *          @OA\Property(property="file_name", type="string", example="9|iwvR6QMeX1s8a83wZFhxvApSbgu7Ee8CJs9N7nR4b05f26e3")
-     *      )
-     *  )
+     *     @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(property="message", type="string", example="User Created Successfully"),
+     *              @OA\Property(property="token", type="string", example="9|iwvR6QMeX1s8a83wZFhxvApSbgu7Ee8CJs9N7nR4b05f26e3")
+     *          )
+     *     )
      * )
      */
     public function createUser(Request $request)
@@ -62,7 +62,7 @@ class AuthController extends Controller
                 return response()->json([
                     'message' => 'validation error',
                     'errors' => $validateUser->errors()
-                ], 401);
+                ], 400);
             }
 
             $user = User::create([
@@ -93,8 +93,8 @@ class AuthController extends Controller
      * @OA\Post(
      *     path="/api/auth/login",
      *     tags={"Auth"},
-     *     summary="Login a user",
-     *     description="Login a user",
+     *     summary="Login user",
+     *     description="Login user",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -103,15 +103,23 @@ class AuthController extends Controller
      *             @OA\Property(property="password", type="string", description="Password", example="password")
      *         )
      *     ),
-     * @OA\Response(
-     *      response=200,
-     *      description="Successful operation",
-     *      @OA\JsonContent(
-     *          type="object",
-     *          @OA\Property(property="message", type="string", example="User Logged In Successfully"),
-     *          @OA\Property(property="file_name", type="string", example="9|iwvR6QMeX1s8a83wZFhxvApSbgu7Ee8CJs9N7nR4b05f26e3")
-     *      )
-     *  )
+     *     @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(property="message", type="string", example="User Logged In Successfully"),
+     *              @OA\Property(property="token", type="string", example="9|iwvR6QMeX1s8a83wZFhxvApSbgu7Ee8CJs9N7nR4b05f26e3")
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response=401,
+     *          description="Wrong credentials",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(property="message", type="string", example="Wrong Email or Password"),
+     *          )
+     *     )
      * )
      */
     public function loginUser(Request $request)
@@ -127,7 +135,7 @@ class AuthController extends Controller
                 return response()->json([
                     'message' => 'validation error',
                     'errors' => $validateUser->errors()
-                ], 401);
+                ], 400);
             }
 
             if(!Auth::attempt($request->only(['email', 'password']))){

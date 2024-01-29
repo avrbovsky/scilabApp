@@ -1,10 +1,10 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Example API",
-        "description": "Example info",
+        "title": "Scilab API",
+        "description": "API for Scilab module from virtual laboratory",
         "contact": {
-            "name": "Swagger API Team"
+            "name": "xvrbovskya@stuba.sk"
         },
         "version": "1.0"
     },
@@ -14,7 +14,7 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Register a user",
+                "summary": "Register user",
                 "description": "Registers new user",
                 "operationId": "c0eaa9600f14ac767e20818010954c59",
                 "requestBody": {
@@ -60,7 +60,7 @@
                                             "type": "string",
                                             "example": "User Created Successfully"
                                         },
-                                        "file_name": {
+                                        "token": {
                                             "type": "string",
                                             "example": "9|iwvR6QMeX1s8a83wZFhxvApSbgu7Ee8CJs9N7nR4b05f26e3"
                                         }
@@ -78,8 +78,8 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Login a user",
-                "description": "Login a user",
+                "summary": "Login user",
+                "description": "Login user",
                 "operationId": "e45287a3dc02f4633476dbf218bb9ef7",
                 "requestBody": {
                     "required": true,
@@ -118,9 +118,25 @@
                                             "type": "string",
                                             "example": "User Logged In Successfully"
                                         },
-                                        "file_name": {
+                                        "token": {
                                             "type": "string",
                                             "example": "9|iwvR6QMeX1s8a83wZFhxvApSbgu7Ee8CJs9N7nR4b05f26e3"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Wrong credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Wrong Email or Password"
                                         }
                                     },
                                     "type": "object"
@@ -206,10 +222,22 @@
                 "summary": "Create a new experiment",
                 "description": "Stores a new experiment",
                 "operationId": "c313fedf97b93b728e83282661ec8f70",
+                "parameters": [
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Authentication token",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "application/json"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "required": [
                                     "file",
@@ -221,7 +249,7 @@
                                     "file": {
                                         "description": "Experiment file",
                                         "type": "string",
-                                        "format": "file"
+                                        "format": "binary"
                                     },
                                     "context": {
                                         "description": "Context",
@@ -233,7 +261,11 @@
                                     },
                                     "save": {
                                         "description": "Save",
-                                        "type": "boolean"
+                                        "type": "integer",
+                                        "enum": [
+                                            0,
+                                            1
+                                        ]
                                     }
                                 },
                                 "type": "object"
@@ -243,10 +275,83 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Experiment created successfully"
+                        "description": "Experiment created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "simulation": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "time": {
+                                                        "type": "number"
+                                                    },
+                                                    "height": {
+                                                        "type": "number"
+                                                    },
+                                                    "velocity": {
+                                                        "type": "number"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "time": 0,
+                                                    "height": 80,
+                                                    "velocity": 0
+                                                },
+                                                {
+                                                    "time": 0.1,
+                                                    "height": 80,
+                                                    "velocity": 0.4801576
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Invalid input"
+                        "description": "Invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "properties": {
+                                                "file": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The file field is required."
+                                                    }
+                                                },
+                                                "context": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The context field is required."
+                                                    }
+                                                },
+                                                "output": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The output field is required."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -322,10 +427,36 @@
                         }
                     },
                     "400": {
-                        "description": "Invalid ID supplied"
+                        "description": "Invalid ID supplied",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid id."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Experiment not found"
+                        "description": "Experiment not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "There is no experiment with that id."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -363,6 +494,10 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Experiment deleted successfully"
+                                        },
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
                                         }
                                     },
                                     "type": "object"
@@ -377,7 +512,12 @@
                                 "schema": {
                                     "properties": {
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Invalid id."
+                                        },
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
                                         }
                                     },
                                     "type": "object"
@@ -392,22 +532,12 @@
                                 "schema": {
                                     "properties": {
                                         "message": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Error deleting experiment",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "There is no experiment with that id."
+                                        },
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
                                         }
                                     },
                                     "type": "object"
