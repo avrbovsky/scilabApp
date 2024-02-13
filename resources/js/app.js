@@ -1,6 +1,14 @@
 import "./bootstrap";
 import { createApp } from "vue";
-import app from "./layouts/app.vue";
+import { createPinia } from "pinia";
+import router from "./router/index.js";
+import App from "./layouts/app.vue";
 import vuetify from "./vuetify";
 
-createApp(app).use(vuetify).mount("#app");
+const app = createApp(App);
+const pinia = createPinia();
+
+app.use(vuetify);
+app.use(pinia);
+app.use(router);
+app.mount("#app");
