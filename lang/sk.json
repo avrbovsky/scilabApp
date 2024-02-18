@@ -6,5 +6,6 @@
     "Login": "Prihlásenie",
     "Register": "Registrácia",
     "CreateAccount": "Ešte nemáš účet? Zaregistruj sa.",
-    "LoginToAccount": "Už máš účet? Prihlás sa"
+    "LoginToAccount": "Už máš účet? Prihlás sa",
+    "Logout": "Odhlásiť sa"
 }

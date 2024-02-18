@@ -6,5 +6,6 @@
     "Login": "Login",
     "Register": "Register",
     "CreateAccount": "Don't have an account? Register.",
-    "LoginToAccount": "Already have an account? Login"
+    "LoginToAccount": "Already have an account? Login",
+    "Logout": "Logout"
 }
