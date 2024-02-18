@@ -1,5 +1,10 @@
 {
     "Username": "Username",
+    "Email": "Email",
+    "Password": "Password",
+    "RepeatPassword": "Repeat Password",
     "Login": "Login",
-    "Register": "Register"
+    "Register": "Register",
+    "CreateAccount": "Don't have an account? Register.",
+    "LoginToAccount": "Already have an account? Login"
 }

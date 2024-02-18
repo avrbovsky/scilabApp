@@ -1,5 +1,6 @@
 <script setup>
 import { useRouter } from "vue-router";
+import { loadLanguageAsync } from "laravel-vue-i18n";
 
 const router = useRouter();
 const onAlreadyHavenAnAccountPressed = () => {
@@ -28,21 +29,21 @@ const onAlreadyHavenAnAccountPressed = () => {
                         id="email"
                         prepend-icon="mdi-email"
                         name="email"
-                        label="Email"
+                        :label="$t('Email')"
                         type="email"
                     ></v-text-field>
                     <v-text-field
                         id="password"
                         prepend-icon="mdi-lock"
                         name="password"
-                        label="Password"
+                        :label="$t('Password')"
                         type="text"
                     ></v-text-field>
                     <v-text-field
                         id="passwordRepeat"
                         prepend-icon="mdi-lock"
                         name="passwordRepeat"
-                        label="Repeat Password"
+                        :label="$t('RepeatPassword')"
                         type="password"
                     ></v-text-field>
                     <div class="flex flex-row justify-end">
@@ -50,11 +51,11 @@ const onAlreadyHavenAnAccountPressed = () => {
                             variant="outlined"
                             class="mr-4"
                             @click="onAlreadyHavenAnAccountPressed"
-                            >Already have an account? Login</v-btn
+                            >{{ $t("LoginToAccount") }}</v-btn
                         >
-                        <v-btn variant="elevated" class="self-end"
-                            >Register</v-btn
-                        >
+                        <v-btn variant="elevated" class="self-end">{{
+                            $t("Register")
+                        }}</v-btn>
                     </div>
                 </v-form>
             </v-container>
