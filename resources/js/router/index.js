@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import AuthLayout from "../layouts/AuthLayout.vue";
 import MainLayout from "../layouts/MainLayout.vue";
 import Login from "../pages/Login.vue";
+import Register from "../pages/Register.vue";
 
 const routes = [
     {
@@ -9,8 +10,18 @@ const routes = [
         component: AuthLayout,
         children: [
             {
-                path: "/",
+                path: "",
                 component: Login,
+            },
+        ],
+    },
+    {
+        path: "/register",
+        component: AuthLayout,
+        children: [
+            {
+                path: "",
+                component: Register,
             },
         ],
     },
