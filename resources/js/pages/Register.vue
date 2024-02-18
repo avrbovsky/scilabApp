@@ -9,8 +9,9 @@ const onAlreadyHavenAnAccountPressed = () => {
 
 <template>
     <v-card variant="outlined" class="w-2/5">
-        <v-card-title class="bg-gray-300 border-b-2 border-b-black border-solid"
-            >Register</v-card-title
+        <v-card-title
+            class="bg-gray-300 border-b-2 border-b-black border-solid"
+            >{{ $t("Register") }}</v-card-title
         >
         <v-icon></v-icon>
         <v-card-text class="ma-0 pa-0">
@@ -20,7 +21,7 @@ const onAlreadyHavenAnAccountPressed = () => {
                         id="login"
                         prepend-icon="mdi-account"
                         name="login"
-                        label="Login"
+                        :label="$t('Login')"
                         type="text"
                     ></v-text-field>
                     <v-text-field
