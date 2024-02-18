@@ -11,7 +11,7 @@ const onCreateAccountPressed = () => {
     <v-card variant="outlined" class="w-2/5">
         <v-card-title
             class="bg-gray-300 border-b-2 border-b-black border-solid"
-            >{{ t$("Login") }}</v-card-title
+            >{{ $t("LoginTitle") }}</v-card-title
         >
         <v-icon></v-icon>
         <v-card-text class="ma-0 pa-0">
@@ -19,15 +19,15 @@ const onCreateAccountPressed = () => {
                 <v-form>
                     <v-text-field
                         prepend-icon="mdi-account"
-                        name="login"
-                        :label="$t('Login')"
+                        name="username"
+                        :label="$t('Username')"
                         type="text"
                     ></v-text-field>
                     <v-text-field
                         id="password"
                         prepend-icon="mdi-lock"
                         name="password"
-                        :label="t('Password')"
+                        :label="$t('Password')"
                         type="password"
                     ></v-text-field>
                     <div class="flex flex-row justify-end">
@@ -38,7 +38,7 @@ const onCreateAccountPressed = () => {
                             >{{ $t("CreateAccount") }}</v-btn
                         >
                         <v-btn variant="elevated" class="self-end">{{
-                            $t("Login")
+                            $t("LoginBtn")
                         }}</v-btn>
                     </div>
                 </v-form>

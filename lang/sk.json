@@ -3,9 +3,11 @@
     "Email": "Email",
     "Password": "Heslo",
     "RepeatPassword": "Heslo Znovu",
-    "Login": "Prihlásenie",
+    "LoginTitle": "Prihlásenie",
+    "LoginBtn": "Prihlásiť sa",
     "Register": "Registrácia",
-    "CreateAccount": "Ešte nemáš účet? Zaregistruj sa.",
+    "RegisterBtn": "Registrovať sa",
+    "CreateAccount": "Ešte nemáš účet? Zaregistruj sa",
     "LoginToAccount": "Už máš účet? Prihlás sa",
     "Logout": "Odhlásiť sa"
 }

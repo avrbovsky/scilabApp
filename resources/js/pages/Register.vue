@@ -1,6 +1,5 @@
 <script setup>
 import { useRouter } from "vue-router";
-import { loadLanguageAsync } from "laravel-vue-i18n";
 
 const router = useRouter();
 const onAlreadyHavenAnAccountPressed = () => {
@@ -19,10 +18,10 @@ const onAlreadyHavenAnAccountPressed = () => {
             <v-container>
                 <v-form>
                     <v-text-field
-                        id="login"
+                        id="username"
                         prepend-icon="mdi-account"
-                        name="login"
-                        :label="$t('Login')"
+                        name="username"
+                        :label="$t('Username')"
                         type="text"
                     ></v-text-field>
                     <v-text-field
@@ -54,7 +53,7 @@ const onAlreadyHavenAnAccountPressed = () => {
                             >{{ $t("LoginToAccount") }}</v-btn
                         >
                         <v-btn variant="elevated" class="self-end">{{
-                            $t("Register")
+                            $t("RegisterBtn")
                         }}</v-btn>
                     </div>
                 </v-form>
