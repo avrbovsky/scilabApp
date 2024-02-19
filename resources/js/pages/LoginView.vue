@@ -1,7 +1,26 @@
 <script setup>
+import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+const valid = ref(false);
+const form = ref(null);
+const formState = reactive({
+    username: "",
+    password: "",
+});
+
+const usernameRules = [(value) => !!value || "Username is required"];
+const passwordRules = [(value) => !!value || "Password is required"];
+
+const onSubmit = () => {
+    if (!valid.value) {
+        return;
+    }
+
+    console.log("Submit");
+};
+
 const onCreateAccountPressed = () => {
     router.push("/register");
 };
@@ -16,30 +35,37 @@ const onCreateAccountPressed = () => {
         <v-icon></v-icon>
         <v-card-text class="ma-0 pa-0">
             <v-container>
-                <v-form>
+                <v-form ref="form" v-model="valid" @submit.prevent="onSubmit">
                     <v-text-field
-                        prepend-icon="mdi-account"
                         name="username"
-                        :label="$t('Username')"
+                        prepend-icon="mdi-account"
                         type="text"
+                        v-model="formState.username"
+                        :label="$t('Username')"
+                        :rules="usernameRules"
                     ></v-text-field>
                     <v-text-field
                         id="password"
-                        prepend-icon="mdi-lock"
                         name="password"
-                        :label="$t('Password')"
+                        prepend-icon="mdi-lock"
                         type="password"
+                        v-model="formState.password"
+                        :label="$t('Password')"
+                        :rules="passwordRules"
                     ></v-text-field>
                     <div class="flex flex-row justify-end">
                         <v-btn
-                            variant="outlined"
                             class="mr-4"
+                            variant="outlined"
                             @click="onCreateAccountPressed"
                             >{{ $t("CreateAccount") }}</v-btn
                         >
-                        <v-btn variant="elevated" class="self-end">{{
-                            $t("LoginBtn")
-                        }}</v-btn>
+                        <v-btn
+                            class="self-end"
+                            type="submit"
+                            variant="elevated"
+                            >{{ $t("LoginBtn") }}</v-btn
+                        >
                     </div>
                 </v-form>
             </v-container>
