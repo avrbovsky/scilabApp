@@ -6,4 +6,10 @@ const signIn = async (signInCredentials) => {
     return response.data;
 };
 
+const signUp = async (signUpCredentials) => {
+    const response = await api.post("/auth/register", signUpCredentials);
+    return response.data;
+};
+
 export const useSignInMutation = () => useMutation({ mutationFn: signIn });
+export const useSignUpMutation = () => useMutation({ mutationFn: signUp });

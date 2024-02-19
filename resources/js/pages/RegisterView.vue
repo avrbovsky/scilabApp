@@ -1,6 +1,7 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
+import { useSignUpMutation } from "../api/queries/authQueries";
 
 const router = useRouter();
 const valid = ref(false);
@@ -31,13 +32,27 @@ const passwordRepeatRules = [
     (value) => value === formState.password || "Passwords doesn't match",
 ];
 
+const { mutateAsync, isLoading } = useSignUpMutation();
+
 const onAlreadyHavenAnAccountPressed = () => {
     router.push("/login");
 };
 
-const onSubmit = () => {
+const onSubmit = async () => {
     if (!valid.value) {
         return;
+    }
+
+    try {
+        await mutateAsync({
+            name: formState.username,
+            email: formState.email,
+            password: formState.password,
+        });
+
+        router.push("/");
+    } catch (err) {
+        console.error(err);
     }
 
     console.log("Submit");
@@ -101,6 +116,7 @@ const onSubmit = () => {
                             class="self-end"
                             type="submit"
                             variant="elevated"
+                            :loading="isLoading"
                             >{{ $t("RegisterBtn") }}</v-btn
                         >
                     </div>
