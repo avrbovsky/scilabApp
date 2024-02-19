@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 import { useSignUpMutation } from "../api/queries/authQueries";
 
 const router = useRouter();
+
 const valid = ref(false);
 const form = ref(null);
 const formState = reactive({
@@ -12,27 +13,24 @@ const formState = reactive({
     password: "",
     passwordRepeat: "",
 });
-
 const usernameRules = [(value) => !!value || "Username is required"];
-
 const emailRules = [
     (value) => !!value || "Email is required",
     (value) => /.+@.+\..+/.test(value) || "Email must be valid",
 ];
-
 const passwordRules = [
     (value) => !!value || "Password is required",
     (value) =>
         (value && value.length >= 6) ||
         "Password must be at least 6 characters long",
 ];
-
 const passwordRepeatRules = [
     (value) => !!value || "Password Repeat is required",
     (value) => value === formState.password || "Passwords doesn't match",
 ];
 
 const { mutateAsync, isLoading } = useSignUpMutation();
+const snackbar = ref(false);
 
 const onAlreadyHavenAnAccountPressed = () => {
     router.push("/login");
@@ -53,9 +51,8 @@ const onSubmit = async () => {
         router.push("/");
     } catch (err) {
         console.error(err);
+        snackbar.value = true;
     }
-
-    console.log("Submit");
 };
 </script>
 
@@ -120,6 +117,14 @@ const onSubmit = async () => {
                             >{{ $t("RegisterBtn") }}</v-btn
                         >
                     </div>
+                    <v-snackbar
+                        color="error"
+                        rounded="pill"
+                        v-model="snackbar"
+                        :timeout="2000"
+                    >
+                        {{ error?.response?.data?.message || "Error ocurred" }}
+                    </v-snackbar>
                 </v-form>
             </v-container>
         </v-card-text>
