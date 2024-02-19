@@ -2,10 +2,9 @@
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useSignInMutation } from "../api/queries/authQueries";
-import { onMounted } from "vue";
-import { toRaw } from "vue";
 
 const router = useRouter();
+
 const valid = ref(false);
 const form = ref(null);
 const formState = reactive({
@@ -14,7 +13,9 @@ const formState = reactive({
 });
 const emailRules = [(value) => !!value || "Email is required"];
 const passwordRules = [(value) => !!value || "Password is required"];
-const { mutateAsync, isLoading } = useSignInMutation();
+
+const { mutateAsync, isLoading, error } = useSignInMutation();
+const snackbar = ref(false);
 
 const onSubmit = async () => {
     if (!valid.value) {
@@ -29,9 +30,9 @@ const onSubmit = async () => {
 
         router.push("/");
     } catch (err) {
-        console.err(err);
+        console.error(err.response.data.message);
+        snackbar.value = true;
     }
-    console.log("Submit");
 };
 
 const onCreateAccountPressed = () => {
@@ -81,6 +82,14 @@ const onCreateAccountPressed = () => {
                             >{{ $t("LoginBtn") }}</v-btn
                         >
                     </div>
+                    <v-snackbar
+                        color="error"
+                        rounded="pill"
+                        v-model="snackbar"
+                        :timeout="2000"
+                    >
+                        {{ error?.response?.data?.message || "Error ocurred" }}
+                    </v-snackbar>
                 </v-form>
             </v-container>
         </v-card-text>
