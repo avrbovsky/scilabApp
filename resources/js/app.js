@@ -2,6 +2,9 @@ import "./bootstrap";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import { i18nVue } from "laravel-vue-i18n";
+import VueAxios from "vue-axios";
+import { VueQueryPlugin } from "@tanstack/vue-query";
+import api from "./api/api.js";
 import router from "./router/index.js";
 import App from "./App.vue";
 import vuetify from "./vuetify";
@@ -12,6 +15,8 @@ const pinia = createPinia();
 app.use(vuetify);
 app.use(pinia);
 app.use(router);
+app.use(VueAxios, api);
+app.use(VueQueryPlugin);
 app.use(i18nVue, {
     resolve: async (lang) => {
         const langs = import.meta.glob("../../lang/*.json");

@@ -1,23 +1,36 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
+import { useSignInMutation } from "../api/queries/authQueries";
+import { onMounted } from "vue";
+import { toRaw } from "vue";
 
 const router = useRouter();
 const valid = ref(false);
 const form = ref(null);
 const formState = reactive({
-    username: "",
+    email: "",
     password: "",
 });
-
-const usernameRules = [(value) => !!value || "Username is required"];
+const emailRules = [(value) => !!value || "Email is required"];
 const passwordRules = [(value) => !!value || "Password is required"];
+const { mutateAsync, isLoading } = useSignInMutation();
 
-const onSubmit = () => {
+const onSubmit = async () => {
     if (!valid.value) {
         return;
     }
 
+    try {
+        await mutateAsync({
+            email: formState.email,
+            password: formState.password,
+        });
+
+        router.push("/");
+    } catch (err) {
+        console.err(err);
+    }
     console.log("Submit");
 };
 
@@ -37,12 +50,12 @@ const onCreateAccountPressed = () => {
             <v-container>
                 <v-form ref="form" v-model="valid" @submit.prevent="onSubmit">
                     <v-text-field
-                        name="username"
+                        name="email"
                         prepend-icon="mdi-account"
                         type="text"
-                        v-model="formState.username"
-                        :label="$t('Username')"
-                        :rules="usernameRules"
+                        v-model="formState.email"
+                        :label="$t('Email')"
+                        :rules="emailRules"
                     ></v-text-field>
                     <v-text-field
                         id="password"
@@ -64,6 +77,7 @@ const onCreateAccountPressed = () => {
                             class="self-end"
                             type="submit"
                             variant="elevated"
+                            :loading="isLoading"
                             >{{ $t("LoginBtn") }}</v-btn
                         >
                     </div>
