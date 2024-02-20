@@ -2,6 +2,7 @@
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useSignUpMutation } from "../api/queries/authQueries";
+import { useAuthStore } from "../stores/Auth";
 
 const router = useRouter();
 
@@ -32,6 +33,8 @@ const passwordRepeatRules = [
 const { mutateAsync, isLoading } = useSignUpMutation();
 const snackbar = ref(false);
 
+const { signIn } = useAuthStore();
+
 const onAlreadyHavenAnAccountPressed = () => {
     router.push("/login");
 };
@@ -42,11 +45,16 @@ const onSubmit = async () => {
     }
 
     try {
-        await mutateAsync({
+        const userData = await mutateAsync({
             name: formState.username,
             email: formState.email,
             password: formState.password,
         });
+
+        signIn(
+            { name: formState.username, email: formState.email },
+            userData.token
+        );
 
         router.push("/");
     } catch (err) {

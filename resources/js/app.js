@@ -2,8 +2,9 @@ import "./bootstrap";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import { i18nVue } from "laravel-vue-i18n";
-import VueAxios from "vue-axios";
 import { VueQueryPlugin } from "@tanstack/vue-query";
+import piniaPluginPersistedState from "pinia-plugin-persistedstate";
+import VueAxios from "vue-axios";
 import api from "./api/api.js";
 import router from "./router/index.js";
 import App from "./App.vue";
@@ -11,6 +12,7 @@ import vuetify from "./vuetify";
 
 const app = createApp(App);
 const pinia = createPinia();
+pinia.use(piniaPluginPersistedState);
 
 app.use(vuetify);
 app.use(pinia);

@@ -2,6 +2,7 @@
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useSignInMutation } from "../api/queries/authQueries";
+import { useAuthStore } from "../stores/Auth";
 
 const router = useRouter();
 
@@ -17,16 +18,20 @@ const passwordRules = [(value) => !!value || "Password is required"];
 const { mutateAsync, isLoading, error } = useSignInMutation();
 const snackbar = ref(false);
 
+const { signIn } = useAuthStore();
+
 const onSubmit = async () => {
     if (!valid.value) {
         return;
     }
 
     try {
-        await mutateAsync({
+        const userData = await mutateAsync({
             email: formState.email,
             password: formState.password,
         });
+
+        signIn({ email: formState.email }, userData.token);
 
         router.push("/");
     } catch (err) {
