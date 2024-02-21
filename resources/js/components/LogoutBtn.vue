@@ -12,9 +12,13 @@ const onLogoutClicked = () => {
 </script>
 
 <template>
-    <div class="pa-2">
-        <v-btn prepend-icon="mdi-logout" block @click="onLogoutClicked"
-            >Logout</v-btn
-        >
-    </div>
+  <div class="pa-2">
+    <v-btn
+      block
+      prepend-icon="mdi-logout"
+      @click="onLogoutClicked"
+    >
+      Logout
+    </v-btn>
+  </div>
 </template>
