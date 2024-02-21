@@ -46,9 +46,9 @@ const onCreateAccountPressed = () => {
 </script>
 
 <template>
-    <v-card variant="outlined" class="w-2/5">
+    <v-card variant="outlined" class="w-2/5 shadow-2xl">
         <v-card-title
-            class="bg-gray-300 border-b-2 border-b-black border-solid"
+            class="bg-blue-500 border-b-2 border-b-black border-solid"
             >{{ $t("LoginTitle") }}</v-card-title
         >
         <v-icon></v-icon>
