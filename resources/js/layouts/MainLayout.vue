@@ -1,16 +1,6 @@
-<script setup>
-import { storeToRefs } from "pinia";
-import { useAuthStore } from "../stores/Auth";
-import NavigationList from "../components/NavigationList.vue";
-import LogoutBtn from "../components/LogoutBtn.vue";
-
-const authStore = useAuthStore();
-const { user } = storeToRefs(authStore);
-</script>
-
 <template>
   <v-layout>
-    <v-app-bar class="shadow-md">
+    <v-app-bar elevation="2">
       <template #title>
         <v-app-bar-title :style="{ fontWeight: 'bold' }">
           Application Bar
@@ -31,10 +21,10 @@ const { user } = storeToRefs(authStore);
         <logout-btn />
       </template>
     </v-navigation-drawer>
-    <v-main class="flex items-center justify-center">
-      <div class="h-full md:px-0 px-4 py-5 w-full">
+    <v-main class="align-center d-flex justify-center">
+      <div class="h-100 px-4 py-5 w-100">
         <div
-          class="bg-white h-full lg:w-2/3 md:w-11/12 mx-auto rounded-lg shadow-md w-full"
+          class="bg-white h-100 mx-auto rounded-lg shadow-md w-75 w-full"
         >
           <router-view />
         </div>
@@ -42,3 +32,13 @@ const { user } = storeToRefs(authStore);
     </v-main>
   </v-layout>
 </template>
+
+<script setup>
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "../stores/Auth";
+import NavigationList from "../components/NavigationList.vue";
+import LogoutBtn from "../components/LogoutBtn.vue";
+
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
+</script>

@@ -1,3 +1,82 @@
+<template>
+  <v-card class="w-50">
+    <v-card-title>
+      {{ $t("Register") }}
+    </v-card-title>
+    <v-divider />
+    <v-card-text class="ma-0 pa-0">
+      <v-container>
+        <v-form
+          ref="form"
+          v-model="valid"
+          @submit.prevent="onSubmit"
+        >
+          <v-text-field
+            id="username"
+            v-model="formState.username"
+            :label="$t('Username')"
+            name="username"
+            prepend-icon="mdi-account"
+            :rules="usernameRules"
+            type="text"
+          />
+          <v-text-field
+            id="email"
+            v-model="formState.email"
+            :label="$t('Email')"
+            name="email"
+            prepend-icon="mdi-email"
+            :rules="emailRules"
+            type="email"
+          />
+          <v-text-field
+            id="password"
+            v-model="formState.password"
+            :label="$t('Password')"
+            name="password"
+            prepend-icon="mdi-lock"
+            :rules="passwordRules"
+            type="password"
+          />
+          <v-text-field
+            id="passwordRepeat"
+            v-model="formState.passwordRepeat"
+            :label="$t('RepeatPassword')"
+            name="passwordRepeat"
+            prepend-icon="mdi-lock"
+            :rules="passwordRepeatRules"
+            type="password"
+          />
+          <div class="d-flex flex-row justify-end">
+            <v-btn
+              class="mr-4"
+              variant="outlined"
+              @click="onAlreadyHavenAnAccountPressed"
+            >
+              {{ $t("LoginToAccount") }}
+            </v-btn>
+            <v-btn
+              :loading="isLoading"
+              type="submit"
+              variant="elevated"
+            >
+              {{ $t("RegisterBtn") }}
+            </v-btn>
+          </div>
+          <v-snackbar
+            v-model="snackbar"
+            color="error"
+            rounded="pill"
+            :timeout="2000"
+          >
+            {{ error?.response?.data?.message || "Error ocurred" }}
+          </v-snackbar>
+        </v-form>
+      </v-container>
+    </v-card-text>
+  </v-card>
+</template>
+
 <script setup>
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -63,88 +142,3 @@ const onSubmit = async () => {
     }
 };
 </script>
-
-<template>
-  <v-card
-    class="shadow-2xl w-2/5"
-    variant="outlined"
-  >
-    <v-card-title
-      class="bg-blue-500 border-b-2 border-b-black border-solid"
-    >
-      {{ $t("Register") }}
-    </v-card-title>
-    <v-icon />
-    <v-card-text class="ma-0 pa-0">
-      <v-container>
-        <v-form
-          ref="form"
-          v-model="valid"
-          @submit.prevent="onSubmit"
-        >
-          <v-text-field
-            id="username"
-            v-model="formState.username"
-            :label="$t('Username')"
-            name="username"
-            prepend-icon="mdi-account"
-            :rules="usernameRules"
-            type="text"
-          />
-          <v-text-field
-            id="email"
-            v-model="formState.email"
-            :label="$t('Email')"
-            name="email"
-            prepend-icon="mdi-email"
-            :rules="emailRules"
-            type="email"
-          />
-          <v-text-field
-            id="password"
-            v-model="formState.password"
-            :label="$t('Password')"
-            name="password"
-            prepend-icon="mdi-lock"
-            :rules="passwordRules"
-            type="password"
-          />
-          <v-text-field
-            id="passwordRepeat"
-            v-model="formState.passwordRepeat"
-            :label="$t('RepeatPassword')"
-            name="passwordRepeat"
-            prepend-icon="mdi-lock"
-            :rules="passwordRepeatRules"
-            type="password"
-          />
-          <div class="flex flex-row justify-end">
-            <v-btn
-              class="mr-4"
-              variant="outlined"
-              @click="onAlreadyHavenAnAccountPressed"
-            >
-              {{ $t("LoginToAccount") }}
-            </v-btn>
-            <v-btn
-              class="self-end"
-              :loading="isLoading"
-              type="submit"
-              variant="elevated"
-            >
-              {{ $t("RegisterBtn") }}
-            </v-btn>
-          </div>
-          <v-snackbar
-            v-model="snackbar"
-            color="error"
-            rounded="pill"
-            :timeout="2000"
-          >
-            {{ error?.response?.data?.message || "Error ocurred" }}
-          </v-snackbar>
-        </v-form>
-      </v-container>
-    </v-card-text>
-  </v-card>
-</template>
