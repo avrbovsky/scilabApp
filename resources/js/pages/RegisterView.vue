@@ -1,6 +1,6 @@
 <template>
   <v-card class="w-50">
-    <v-card-title>
+    <v-card-title class="bg-primary">
       {{ $t("Register") }}
     </v-card-title>
     <v-divider />

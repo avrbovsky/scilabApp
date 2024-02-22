@@ -2,12 +2,12 @@
   <v-layout>
     <v-app-bar elevation="2">
       <template #title>
-        <v-app-bar-title :style="{ fontWeight: 'bold' }">
+        <v-app-bar-title class="font-weight-bold">
           Application Bar
         </v-app-bar-title>
       </template>
     </v-app-bar>
-    <v-navigation-drawer class="bg-black">
+    <v-navigation-drawer theme="dark">
       <v-list>
         <v-list-item
           prepend-avatar="https://randomuser.me/api/portraits/men/73.jpg"
@@ -22,13 +22,13 @@
       </template>
     </v-navigation-drawer>
     <v-main class="align-center d-flex justify-center">
-      <div class="h-100 px-4 py-5 w-100">
-        <div
-          class="bg-white h-100 mx-auto rounded-lg shadow-md w-75 w-full"
+      <v-container class="h-100 px-4 py-5 w-100">
+        <v-container
+          class="bg-surface elevation-3 h-100 mx-auto rounded-lg shadow-md w-75 w-full"
         >
           <router-view />
-        </div>
-      </div>
+        </v-container>
+      </v-container>
     </v-main>
   </v-layout>
 </template>

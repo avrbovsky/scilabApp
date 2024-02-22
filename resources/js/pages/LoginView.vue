@@ -1,9 +1,8 @@
 <template>
   <v-card class="w-50">
-    <v-card-title>
+    <v-card-title class="bg-primary">
       {{ $t("LoginTitle") }}
     </v-card-title>
-    <v-divider />
     <v-card-text class="ma-0 pa-0">
       <v-container>
         <v-form
