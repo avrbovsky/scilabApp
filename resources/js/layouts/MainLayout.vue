@@ -35,9 +35,9 @@
 
 <script setup>
 import { storeToRefs } from "pinia";
-import { useAuthStore } from "../stores/Auth";
-import NavigationList from "../components/NavigationList.vue";
-import LogoutBtn from "../components/LogoutBtn.vue";
+import { useAuthStore } from "@/stores/Auth";
+import NavigationList from "@/components/NavigationList.vue";
+import LogoutBtn from "@/components/LogoutBtn.vue";
 
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);

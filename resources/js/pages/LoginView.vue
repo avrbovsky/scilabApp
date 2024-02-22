@@ -61,8 +61,8 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-import { useSignInMutation } from "../api/queries/authQueries";
-import { useAuthStore } from "../stores/Auth";
+import { useSignInMutation } from "@/api/queries/authQueries";
+import { useAuthStore } from "@/stores/Auth";
 
 const router = useRouter();
 
