@@ -10,7 +10,12 @@
     @update:options="loadItems"
   >
     <template #top>
-      <v-toolbar title="Experiments">
+      <v-toolbar
+        class="rounded-t-xl"
+      >
+        <v-toolbar-title class="text-h4">
+          Experiments
+        </v-toolbar-title>
         <v-btn
           prepend-icon="mdi-plus-circle"
           to="/experiments/add"
