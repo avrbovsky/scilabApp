@@ -9,11 +9,19 @@
     :search="search"
     @update:options="loadItems"
   >
+    <template #top>
+      <v-toolbar title="Experiments">
+        <v-btn
+          prepend-icon="mdi-plus-circle"
+          variant="elevated"
+          @click="onCreateExperimentClicked"
+        >
+          Create Experiment
+        </v-btn>
+      </v-toolbar>
+    </template>
     <template #item="{ item }">
-      <tr
-        class="elevation-2 rounded-xl"
-        @click="onRowClick(item)"
-      >
+      <tr @click="onRowClick(item)">
         <td>{{ item.id }}</td>
         <td>{{ item.name }}</td>
         <td>{{ item.created_by }}</td>
@@ -57,7 +65,6 @@ const totalItems = ref(0);
 
 const loadItems = () => {
   mutateAsync().then(({data}) => {
-    console.log(data);
     experiments.value = data.experiments;
     totalItems.value = data.experiments.length;
   });
@@ -65,5 +72,9 @@ const loadItems = () => {
 
 const onRowClick = (item) => {
   router.push(`/experiments/${item.id}`);
+};
+
+const onCreateExperimentClicked = () => {
+  router.push("/experiments/add");
 };
 </script>
