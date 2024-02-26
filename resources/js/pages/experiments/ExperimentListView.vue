@@ -64,6 +64,6 @@ const loadItems = () => {
 };
 
 const onRowClick = (item) => {
-  router.push(`/experiment/${item.id}`);
+  router.push(`/experiments/${item.id}`);
 };
 </script>

@@ -4,6 +4,8 @@ import MainLayout from "@/layouts/MainLayout.vue";
 import LoginView from "@/pages/auth/LoginView.vue";
 import RegisterView from "@/pages/auth/RegisterView.vue";
 import ExperimentListView from "@/pages/experiments/ExperimentListView.vue";
+import ExperimentCreateView from "@/pages/experiments/CreateView";
+import ExperimentDetailView from "@/pages/experiments/DetailView";
 import { authGuard } from "./Guards/AuthGuard";
 
 const routes = [
@@ -36,11 +38,19 @@ const routes = [
         children: [
             {
                 path:"",
-                component: ExperimentListView
+                component: ExperimentListView,
+            },
+            {
+                path: "add",
+                component: ExperimentCreateView,
             },
             {
                 path: ":id",
-                component: ExperimentListView
+                component: ExperimentDetailView,
+            },
+            {
+                path: ':id/edit',
+                component: ExperimentCreateView,
             }
         ]
     },
