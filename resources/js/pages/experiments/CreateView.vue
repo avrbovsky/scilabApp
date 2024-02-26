@@ -1,26 +1,20 @@
 <template>
   <div>
-    <v-toolbar class="rounded-t-xl">
-      <v-btn
-        icon
-        to="/experiments"
-      >
-        <v-icon>mdi-arrow-left</v-icon>
-      </v-btn>
-      <v-toolbar-title class="text-h4">
-        {{ title }}
-      </v-toolbar-title>
-      <v-spacer />
+    <header-component
+      :back-button="true"
+      :title="title"
+    >
       <v-btn icon>
         <v-icon>mdi-content-save</v-icon>
       </v-btn>
-    </v-toolbar>
+    </header-component>
   </div>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import HeaderComponent from './components/HeaderComponent.vue';
 
 const route = useRoute();
 const isEditView = ref(route.path.includes('edit'));

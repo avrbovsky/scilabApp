@@ -10,12 +10,7 @@
     @update:options="loadItems"
   >
     <template #top>
-      <v-toolbar
-        class="rounded-t-xl"
-      >
-        <v-toolbar-title class="text-h4">
-          Experiments
-        </v-toolbar-title>
+      <header-component title="Experiments">
         <v-btn
           prepend-icon="mdi-plus-circle"
           to="/experiments/add"
@@ -23,7 +18,7 @@
         >
           Create Experiment
         </v-btn>
-      </v-toolbar>
+      </header-component>
     </template>
     <template #item="{ item }">
       <tr
@@ -46,6 +41,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useExperimentsListMutation } from "@/api/queries/experimentQueries";
 import {parseDate} from "@/utils/timeUtils";
+import HeaderComponent from "./components/HeaderComponent.vue";
 
 const router = useRouter();
 const {isLoading, mutateAsync} = useExperimentsListMutation();
