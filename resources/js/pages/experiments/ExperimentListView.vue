@@ -21,7 +21,10 @@
       </v-toolbar>
     </template>
     <template #item="{ item }">
-      <tr @click="onRowClick(item)">
+      <tr
+        class="cursor-pointer table-row"
+        @click="onRowClick(item)"
+      >
         <td>{{ item.id }}</td>
         <td>{{ item.name }}</td>
         <td>{{ item.created_by }}</td>
@@ -74,3 +77,9 @@ const onRowClick = (item) => {
   router.push(`/experiments/${item.id}`);
 };
 </script>
+
+<style scoped>
+.table-row:hover {
+  background: rgb(var(--v-theme-background));
+}
+</style>
