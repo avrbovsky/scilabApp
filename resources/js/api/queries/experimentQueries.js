@@ -1,9 +1,7 @@
 import { useMutation } from "@tanstack/vue-query";
 import api from "../api";
 
-const experimentsList = async () => {
-    const response = await api.get("/experiments");
-    return response;
-};
+const experimentsList = () =>
+    api.get("/experiments");
 
 export const useExperimentsListMutation = () => useMutation({mutationFn: experimentsList});
