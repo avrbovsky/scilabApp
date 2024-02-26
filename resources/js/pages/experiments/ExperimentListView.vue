@@ -13,8 +13,8 @@
       <v-toolbar title="Experiments">
         <v-btn
           prepend-icon="mdi-plus-circle"
+          to="/experiments/add"
           variant="elevated"
-          @click="onCreateExperimentClicked"
         >
           Create Experiment
         </v-btn>
@@ -72,9 +72,5 @@ const loadItems = () => {
 
 const onRowClick = (item) => {
   router.push(`/experiments/${item.id}`);
-};
-
-const onCreateExperimentClicked = () => {
-  router.push("/experiments/add");
 };
 </script>
