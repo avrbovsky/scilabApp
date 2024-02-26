@@ -30,16 +30,24 @@ const routes = [
         beforeEnter: [authGuard],
     },
     {
-        path: "/",
+        path: "/experiments",
         component: MainLayout,
         beforeEnter: [authGuard],
         children: [
             {
-                path:"/",
+                path:"",
+                component: ExperimentListView
+            },
+            {
+                path: ":id",
                 component: ExperimentListView
             }
         ]
     },
+    {
+        path: '/',
+        redirect: '/experiments',
+    }
 ];
 
 const router = createRouter({

@@ -10,8 +10,12 @@
     @update:options="loadItems"
   >
     <template #item="{ item }">
-      <tr class="elevation-2 rounded-xl">
+      <tr
+        class="elevation-2 rounded-xl"
+        @click="onRowClick(item)"
+      >
         <td>{{ item.id }}</td>
+        <td>{{ item.name }}</td>
         <td>{{ item.created_by }}</td>
         <td class="text-right">
           {{ parseDate(item.created_at) }}
@@ -23,9 +27,11 @@
 
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import { useExperimentsListMutation } from "@/api/queries/experimentQueries";
 import {parseDate} from "@/utils/timeUtils";
 
+const router = useRouter();
 const {isLoading, mutateAsync} = useExperimentsListMutation();
 const itemsPerPage = ref(5);
 const headers= [
@@ -34,6 +40,12 @@ const headers= [
     align: 'start',
     sortable: true,
     key: 'id',
+  },
+  {
+    title: "Name",
+    align: "start",
+    sortable: true,
+    key: "name"
   },
   { title: 'Created By', key: 'createdBy', align: 'start' },
   { title: 'Created At', key: 'createdAt', align: 'end' },
@@ -49,5 +61,9 @@ const loadItems = () => {
     experiments.value = data.experiments;
     totalItems.value = data.experiments.length;
   });
+};
+
+const onRowClick = (item) => {
+  router.push(`/experiment/${item.id}`);
 };
 </script>
