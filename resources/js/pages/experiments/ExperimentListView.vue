@@ -68,9 +68,11 @@ const experiments = ref([]);
 const totalItems = ref(0);
 
 const loadItems = () => {
-  mutateAsync().then(({data}) => {
-    experiments.value = data.experiments;
-    totalItems.value = data.experiments.length;
+  mutateAsync().then((data) => {
+    if(data){
+      experiments.value = data.experiments;
+      totalItems.value = data.experiments.length;
+    }
   });
 };
 
