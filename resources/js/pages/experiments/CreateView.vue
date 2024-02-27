@@ -1,9 +1,6 @@
 <template>
   <div>
-    <v-card
-      class="rounded-t-xl"
-      color="grey-lighten-3"
-    >
+    <v-card class="rounded-t-xl">
       <v-card-title>
         <header-component
           :back-button="true"
@@ -19,27 +16,38 @@
           ref="form"
           v-model="valid"
         >
-          <div class="d-flex">
-            <div class="d-flex flex-1-1-100 flex-column">
-              <v-text-field
-                v-model="formState.name"
-                label="Name"
-                required
-                :rules="nameRules"
-              />
-            </div>
-            <div class="d-flex flex-1-1-100 flex-column" />
-          </div>
-          <div class="d-flex">
-            <div class="d-flex flex-1-1-100 flex-column">
-              <v-text-field
-                v-model="formState.name"
-                label="Name"
-                required
-                :rules="nameRules"
-              />
-            </div>
-            <div class="d-flex flex-1-1-100 flex-column" />
+          <div class="ma-auto w-50">
+            <v-text-field
+              v-model="formState.name"
+              label="Name"
+              prepend-icon="mdi-rename-outline"
+              required
+              :rules="nameRules"
+              variant="outlined"
+            />
+            <v-file-input
+              v-model="formState.file"
+              accept=".zcos"
+              chips
+              label="Experiment file"
+              required
+              :rules="fileRules"
+              variant="outlined"
+            />
+            <v-textarea
+              v-model="formState.output"
+              label="Output object"
+              prepend-icon="mdi-code-json"
+              :rules="outputRules"
+              variant="outlined"
+            />
+            <v-textarea
+              v-model="formState.input"
+              label="Input object"
+              prepend-icon="mdi-code-json"
+              :rules="inputRules"
+              variant="outlined"
+            />
           </div>
         </v-form>
       </v-card-text>
@@ -59,10 +67,28 @@ const title = computed(()=> isEditView.value ? 'Edit View' : 'Create View');
 const valid = ref(false);
 const form = ref(null);
 const formState = reactive({
-    email: "",
-    password: "",
+    name: "",
+    file: undefined,
+    output: "{}",
+    input: "{}",
 });
 const nameRules = [(value) => !!value || "Name is required"];
+const fileRules = [(value) => !!value || "Experiment schema is required"];
+const outputRules = [(value) => isJsonString(value) || "Output is not a valid JSON"];
+const inputRules = [(value) => isJsonString(value) || "Input is not a valid JSON"];
+
+const isJsonString = (jsonString) => {
+  try {
+        var o = JSON.parse(jsonString);
+
+        if (o && typeof o === "object") {
+            return true;
+        }
+    }
+    catch (e) { /* empty */ }
+
+    return false;
+};
 </script>
 
 <style scoped>
