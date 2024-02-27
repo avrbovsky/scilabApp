@@ -1,15 +1,6 @@
 <template>
-  <v-data-table-server
-    v-model:items-per-page="itemsPerPage"
-    :headers="headers"
-    item-value="name"
-    :items="experiments"
-    :items-length="totalItems"
-    :loading="isLoading"
-    :search="search"
-    @update:options="loadItems"
-  >
-    <template #top>
+  <v-card class="rounded-t-xl">
+    <v-card-title>
       <header-component title="Experiments">
         <v-btn
           prepend-icon="mdi-plus-circle"
@@ -19,21 +10,32 @@
           Create Experiment
         </v-btn>
       </header-component>
-    </template>
-    <template #item="{ item }">
-      <tr
-        class="cursor-pointer table-row"
-        @click="onRowClick(item)"
-      >
-        <td>{{ item.id }}</td>
-        <td>{{ item.name }}</td>
-        <td>{{ item.created_by }}</td>
-        <td class="text-right">
-          {{ parseDate(item.created_at) }}
-        </td>
-      </tr>
-    </template>
-  </v-data-table-server>
+    </v-card-title>
+    <v-data-table-server
+      v-model:items-per-page="itemsPerPage"
+      :headers="headers"
+      item-value="name"
+      :items="experiments"
+      :items-length="totalItems"
+      :loading="isLoading"
+      :search="search"
+      @update:options="loadItems"
+    >
+      <template #item="{ item }">
+        <tr
+          class="cursor-pointer table-row"
+          @click="onRowClick(item)"
+        >
+          <td>{{ item.id }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.created_by }}</td>
+          <td class="text-right">
+            {{ parseDate(item.created_at) }}
+          </td>
+        </tr>
+      </template>
+    </v-data-table-server>
+  </v-card>
 </template>
 
 <script setup>
@@ -84,5 +86,9 @@ const onRowClick = (item) => {
 <style scoped>
 .table-row:hover {
   background: rgb(var(--v-theme-background));
+}
+
+.v-card-title{
+  padding: 0;
 }
 </style>

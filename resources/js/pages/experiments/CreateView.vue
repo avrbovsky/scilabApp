@@ -1,58 +1,56 @@
 <template>
-  <div>
-    <v-card class="rounded-t-xl">
-      <v-card-title>
-        <header-component
-          :back-button="true"
-          :title="title"
-        >
-          <v-btn icon>
-            <v-icon>mdi-content-save</v-icon>
-          </v-btn>
-        </header-component>
-      </v-card-title>
-      <v-card-text>
-        <v-form
-          ref="form"
-          v-model="valid"
-        >
-          <div class="ma-auto w-50">
-            <v-text-field
-              v-model="formState.name"
-              label="Name"
-              prepend-icon="mdi-rename-outline"
-              required
-              :rules="nameRules"
-              variant="outlined"
-            />
-            <v-file-input
-              v-model="formState.file"
-              accept=".zcos"
-              chips
-              label="Experiment file"
-              required
-              :rules="fileRules"
-              variant="outlined"
-            />
-            <v-textarea
-              v-model="formState.output"
-              label="Output object"
-              prepend-icon="mdi-code-json"
-              :rules="outputRules"
-              variant="outlined"
-            />
-            <v-textarea
-              v-model="formState.input"
-              label="Input object"
-              prepend-icon="mdi-code-json"
-              :rules="inputRules"
-              variant="outlined"
-            />
-          </div>
-        </v-form>
-      </v-card-text>
-    </v-card>
-  </div>
+  <v-card class="rounded-t-xl">
+    <v-card-title>
+      <header-component
+        :back-button="true"
+        :title="title"
+      >
+        <v-btn icon>
+          <v-icon>mdi-content-save</v-icon>
+        </v-btn>
+      </header-component>
+    </v-card-title>
+    <v-card-text>
+      <v-form
+        ref="form"
+        v-model="valid"
+      >
+        <div class="ma-auto w-50">
+          <v-text-field
+            v-model="formState.name"
+            label="Name"
+            prepend-icon="mdi-rename-outline"
+            required
+            :rules="nameRules"
+            variant="outlined"
+          />
+          <v-file-input
+            v-model="formState.file"
+            accept=".zcos"
+            chips
+            label="Experiment file"
+            required
+            :rules="fileRules"
+            variant="outlined"
+          />
+          <v-textarea
+            v-model="formState.output"
+            label="Output object"
+            prepend-icon="mdi-code-json"
+            :rules="outputRules"
+            variant="outlined"
+          />
+          <v-textarea
+            v-model="formState.input"
+            label="Input object"
+            prepend-icon="mdi-code-json"
+            :rules="inputRules"
+            variant="outlined"
+          />
+        </div>
+      </v-form>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script setup>
