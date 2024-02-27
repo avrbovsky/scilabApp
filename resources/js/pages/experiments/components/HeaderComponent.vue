@@ -1,5 +1,8 @@
 <template>
-  <v-toolbar class="rounded-t-xl">
+  <v-toolbar
+    class="rounded-t-xl"
+    color="primary"
+  >
     <v-btn
       v-if="backButton"
       icon
