@@ -1,6 +1,6 @@
 <template>
   <v-toolbar
-    class="rounded-t-xl"
+    class="rounded-t-lg"
     color="primary"
   >
     <v-btn

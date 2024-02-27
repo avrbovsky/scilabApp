@@ -1,18 +1,17 @@
 <template>
-  <v-card class="rounded-t-xl">
-    <v-card-title>
-      <header-component title="Experiments">
-        <v-btn
-          prepend-icon="mdi-plus-circle"
-          to="/experiments/add"
-          variant="elevated"
-        >
-          Create Experiment
-        </v-btn>
-      </header-component>
-    </v-card-title>
+  <div>
+    <header-component title="Experiments">
+      <v-btn
+        prepend-icon="mdi-plus-circle"
+        to="/experiments/add"
+        variant="elevated"
+      >
+        Create Experiment
+      </v-btn>
+    </header-component>
     <v-data-table-server
       v-model:items-per-page="itemsPerPage"
+      class="px-4"
       :headers="headers"
       item-value="name"
       :items="experiments"
@@ -35,7 +34,7 @@
         </tr>
       </template>
     </v-data-table-server>
-  </v-card>
+  </div>
 </template>
 
 <script setup>
