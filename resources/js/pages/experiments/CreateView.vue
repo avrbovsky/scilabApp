@@ -1,11 +1,26 @@
 <template>
-  <v-card class="rounded-t-xl">
+  <v-card
+    class="rounded-t-xl"
+    :loading="isPending"
+  >
+    <template #loader="{ isActive }">
+      <v-progress-linear
+        :active="isActive"
+        color="blue-grey-lighten-3"
+        height="4"
+        indeterminate
+      />
+    </template>
     <v-card-title>
       <header-component
         :back-button="true"
         :title="title"
       >
-        <v-btn icon>
+        <v-btn
+          :disabled="isPending"
+          icon
+          @click="onSaveClicked"
+        >
           <v-icon>mdi-content-save</v-icon>
         </v-btn>
       </header-component>
@@ -14,10 +29,12 @@
       <v-form
         ref="form"
         v-model="valid"
+        :disabled="isPending"
       >
         <div class="ma-auto w-50">
           <v-text-field
             v-model="formState.name"
+            class="mb-4"
             label="Name"
             prepend-icon="mdi-rename-outline"
             required
@@ -28,6 +45,7 @@
             v-model="formState.file"
             accept=".zcos"
             chips
+            class="mb-4"
             label="Experiment file"
             required
             :rules="fileRules"
@@ -35,6 +53,7 @@
           />
           <v-textarea
             v-model="formState.output"
+            class="mb-4"
             label="Output object"
             prepend-icon="mdi-code-json"
             :rules="outputRules"
@@ -48,6 +67,13 @@
             variant="outlined"
           />
         </div>
+        <v-snackbar
+          v-model="snackbar"
+          :color="snackbarColor"
+          rounded="pill"
+        >
+          {{ snackbarText }}
+        </v-snackbar>
       </v-form>
     </v-card-text>
   </v-card>
@@ -55,12 +81,19 @@
 
 <script setup>
 import { computed, reactive, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import HeaderComponent from './components/HeaderComponent.vue';
+import { useExperimentSaveMutation } from '../../api/queries/experimentQueries';
 
 const route = useRoute();
+const router = useRouter();
 const isEditView = ref(route.path.includes('edit'));
 const title = computed(()=> isEditView.value ? 'Edit View' : 'Create View');
+
+const { isPending, mutateAsync } = useExperimentSaveMutation();
+const snackbar = ref(false);
+const snackbarColor = ref("success");
+const snackbarText = ref("Experiment created successfully");
 
 const valid = ref(false);
 const form = ref(null);
@@ -71,7 +104,7 @@ const formState = reactive({
     input: "{}",
 });
 const nameRules = [(value) => !!value || "Name is required"];
-const fileRules = [(value) => !!value || "Experiment schema is required"];
+const fileRules = [(value) => !value || !!value.length || "Experiment schema is required"];
 const outputRules = [(value) => isJsonString(value) || "Output is not a valid JSON"];
 const inputRules = [(value) => isJsonString(value) || "Input is not a valid JSON"];
 
@@ -86,6 +119,34 @@ const isJsonString = (jsonString) => {
     catch (e) { /* empty */ }
 
     return false;
+};
+
+const onSaveClicked = async () => {
+  const { valid: isValid } = await form.value.validate();
+
+  if (isValid) {
+    try {
+      const {data} = await mutateAsync({
+        name: formState.name,
+        file: formState.file[0],
+        context: formState.input,
+        output: formState.output,
+      });
+
+      console.log(data);
+      
+      snackbarText.value = "Experiment created successfully";
+      snackbarColor.value = "success";
+      snackbar.value = true;
+      
+      router.push("/experiments/10");
+    } catch (err) {
+      snackbarText.value = "There was an error when creating Experiment";
+      snackbarColor.value = "error";
+      snackbar.value = true;
+    }
+    
+  }
 };
 </script>
 
