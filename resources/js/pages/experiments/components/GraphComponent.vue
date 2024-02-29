@@ -17,6 +17,10 @@ const props = defineProps({
 });
 
 const dataSeries = computed(()=> {
+    if(!props.data.length){
+        return [];
+    }
+
     const series = props.data.reduce((prevVal, nextVal)=>{
         const values = Object.values(nextVal);
 
@@ -38,10 +42,15 @@ const xAxis = computed(()=>
 
 const options = computed(()=>({
     chart: {
-        id: "scilab-simulation"
+        id: "scilab-simulation",
     },
     xaxis: {
-        categories: xAxis.value
-    }
+        type: 'numeric',
+        tickAmount: Math.ceil(xAxis.value[xAxis.value.length - 1]) / 1,
+        categories: xAxis.value,
+    },
+    stroke: {
+        width: 2,
+    },
 }));
 </script>

@@ -73,20 +73,19 @@
           {{ snackbarText }}
         </v-snackbar>
       </v-form>
-      <graph-component :data="dummyData" />
+      <graph-component :data="graphData" />
     </v-card-text>
   </v-card>
 </template>
 
 <script setup>
 import { computed, reactive, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useExperimentSaveMutation } from '../../api/queries/experimentQueries';
 import HeaderComponent from './components/HeaderComponent.vue';
 import GraphComponent from './components/GraphComponent.vue';
 
 const route = useRoute();
-const router = useRouter();
 const isEditView = ref(route.path.includes('edit'));
 const title = computed(()=> isEditView.value ? 'Edit View' : 'Create View');
 
@@ -108,18 +107,7 @@ const fileRules = [(value) => !value || !!value.length || "Experiment schema is 
 const outputRules = [(value) => isJsonString(value) || "Output is not a valid JSON"];
 const inputRules = [(value) => isJsonString(value) || "Input is not a valid JSON"];
 
-const dummyData = computed(()=>[
-    {
-      "time": 0,
-      "height": 80,
-      "velocity": 0
-    },
-    {
-      "time": 0.1,
-      "height": 80,
-      "velocity": 0.4801576
-    }
-]);
+const graphData = ref([]);
 
 const isJsonString = (jsonString) => {
   try {
@@ -145,14 +133,13 @@ const onSaveClicked = async () => {
         context: formState.input,
         output: formState.output,
       });
-
-      console.log(data);
       
       snackbarText.value = "Experiment created successfully";
       snackbarColor.value = "success";
       snackbar.value = true;
-      
-      router.push("/experiments/10");
+      form.value.reset();
+      graphData.value = data.simulation;
+
     } catch (err) {
       snackbarText.value = "There was an error when creating Experiment";
       snackbarColor.value = "error";
