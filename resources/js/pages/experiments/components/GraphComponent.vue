@@ -21,14 +21,26 @@ const dataSeries = computed(()=> {
         return [];
     }
 
+    let reduceStartValue = [];
+    const numberOfItems = Object.values(props.data[0]).length;
+
+    for(let i = 1; i < numberOfItems; i++){
+        reduceStartValue.push([]);
+    }
+
     const series = props.data.reduce((prevVal, nextVal)=>{
         const values = Object.values(nextVal);
 
-        return [[...prevVal[0], values[1]],[...prevVal[1], values[2]]];
-    },[[],[],[]]);
+        const newVal = [];
+        for(let i = 1; i < values.length; i++){
+            newVal.push([...prevVal[i-1], values[i]]);
+        }
+
+        return [...newVal];
+    },reduceStartValue);
 
   const keys = Object.keys(props.data[0]);
-  const mappedSeries = series.map((ser, idx) => ({name: keys[idx+1], data: ser}));
+  const mappedSeries = series.map((ser, idx) => ({name: Array.isArray(props.data[0]) ? undefined : keys[idx + 1], data: ser}));
 
   return mappedSeries;
 });
