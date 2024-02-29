@@ -187,16 +187,18 @@ class ExperimentController extends Controller
         $originalFileName = $file->getClientOriginalName();
         $filePath = $file->storeAs('experiment_files', $originalFileName);
 
-        $experiment = Experiment::create([
-            'file_name' => $filePath,
-            'name' => $request->input('name'),
-            'context' => $request->input('context'),
-            'output' => $request->input('output'),
-            'save' => $request->input('save', false),
-            'created_by' => auth()->id(),
-        ]);
+        // $experiment = Experiment::create([
+        //     'file_name' => $filePath,
+        //     'name' => $request->input('name'),
+        //     'context' => $request->input('context'),
+        //     'output' => $request->input('output'),
+        //     'save' => $request->input('save', false),
+        //     'created_by' => auth()->id(),
+        // ]);
 
-        $script = "ssh -i ~/.ssh/id_rsa -p 2222 -q -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\" root@localhost 'SCRIPT=\"loadXcosLibs();loadScicos();importXcosDiagram('\'/opt/bp-app/1622619815_1619954846_tcn.zcos\'');Context=struct();scicos_simulate(scs_m,list(),Context,'\'nw\'');\" export SCRIPT;' /opt/bp-app/run-script.sh";
+        $output_values = json_decode($request->input('output'));
+        
+        $script = "ssh -i ~/.ssh/id_rsa -p 2222 -q -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\" root@localhost 'SCRIPT=\"loadXcosLibs();loadScicos();importXcosDiagram('\'/opt/bp-app/1622619815_1619954846_tcn.zcos\'');Context=struct();Context.endtime=10;Context.H=60;scicos_simulate(scs_m,list(),Context,'\'nw\'');\" export SCRIPT;' /opt/bp-app/run-script.sh";
 
         $result = shell_exec($script);
 
@@ -205,8 +207,24 @@ class ExperimentController extends Controller
 
         $result_array = [];
         foreach ($result as $string) {
-            $values = array_map('trim', explode("\n", $string));
-            array_push($result_array, $values);
+            $string = trim($string);
+            $values = array_map(function($item) {
+                return floatval(trim($item));
+            }, explode("\n", $string));
+
+            $values_count = count($values);
+            $output_count = count($output_values);
+
+            if($values_count <= $output_count){
+                $obj = [];
+                for($i = 0; $i < $values_count; $i++){
+                    $obj[$output_values[$i]] = $values[$i];
+                }
+
+                array_push($result_array, $obj);
+            } else {
+                array_push($result_array, $values);
+            }
         }
 
         return response()->json(["simulation"=>$result_array], 201);
