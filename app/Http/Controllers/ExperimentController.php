@@ -197,8 +197,14 @@ class ExperimentController extends Controller
         // ]);
 
         $output_values = json_decode($request->input('output'));
+        $input_values = json_decode($request->input('context'));
+
+        $context = "";
+        foreach ($input_values as $key => $value) {
+            $context .= "Context.{$key}={$value};";
+        }
         
-        $script = "ssh -i ~/.ssh/id_rsa -p 2222 -q -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\" root@localhost 'SCRIPT=\"loadXcosLibs();loadScicos();importXcosDiagram('\'/opt/bp-app/1622619815_1619954846_tcn.zcos\'');Context=struct();Context.endtime=10;Context.H=60;scicos_simulate(scs_m,list(),Context,'\'nw\'');\" export SCRIPT;' /opt/bp-app/run-script.sh";
+        $script = "ssh -i ~/.ssh/id_rsa -p 2222 -q -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\" root@localhost 'SCRIPT=\"loadXcosLibs();loadScicos();importXcosDiagram('\'/opt/bp-app/1622619815_1619954846_tcn.zcos\'');Context=struct();" . $context . "scicos_simulate(scs_m,list(),Context,'\'nw\'');\" export SCRIPT;' /opt/bp-app/run-script.sh";
 
         $result = shell_exec($script);
 
