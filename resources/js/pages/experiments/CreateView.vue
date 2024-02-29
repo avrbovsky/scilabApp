@@ -73,6 +73,7 @@
           {{ snackbarText }}
         </v-snackbar>
       </v-form>
+      <graph-component :data="dummyData" />
     </v-card-text>
   </v-card>
 </template>
@@ -80,8 +81,9 @@
 <script setup>
 import { computed, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import HeaderComponent from './components/HeaderComponent.vue';
 import { useExperimentSaveMutation } from '../../api/queries/experimentQueries';
+import HeaderComponent from './components/HeaderComponent.vue';
+import GraphComponent from './components/GraphComponent.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -105,6 +107,19 @@ const nameRules = [(value) => !!value || "Name is required"];
 const fileRules = [(value) => !value || !!value.length || "Experiment schema is required"];
 const outputRules = [(value) => isJsonString(value) || "Output is not a valid JSON"];
 const inputRules = [(value) => isJsonString(value) || "Input is not a valid JSON"];
+
+const dummyData = computed(()=>[
+    {
+      "time": 0,
+      "height": 80,
+      "velocity": 0
+    },
+    {
+      "time": 0.1,
+      "height": 80,
+      "velocity": 0.4801576
+    }
+]);
 
 const isJsonString = (jsonString) => {
   try {
