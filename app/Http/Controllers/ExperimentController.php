@@ -52,12 +52,19 @@ class ExperimentController extends Controller
      *      )
      *  )
      */
-    public function index()
+    public function index(Request $request)
     {
         try{
-            $experiments =  Experiment::all();
+            $perPage = $request->query('perPage', 5);
+            $sortByKey = $request->query('sortByKey', "id");
+            $sortByOrder = $request->query('sortByOrder', "asc");
+            $experiments =  Experiment::orderBy($sortByKey, $sortByOrder)->get();
+            if($perPage == -1) {
+                return response()->json(["experiments"=>["data"=>$experiments, "total"=>$experiments->count()]]);
+            }
+            $paginator = collect($experiments)->paginate($perPage);
 
-            return response()->json(["experiments"=> $experiments], 200);
+            return response()->json(["experiments"=> $paginator], 200);
         }catch(\Exception $exception){
             return response()->json(["message"=>"Error - {$exception->getMessage()}"]);
         }
