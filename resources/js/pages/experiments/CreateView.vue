@@ -53,7 +53,7 @@
             v-model="formState.output"
             class="mb-4"
             label="Output object"
-            prepend-icon="mdi-code-json"
+            prepend-icon="mdi-code-brackets"
             :rules="outputRules"
             variant="outlined"
           />
@@ -99,7 +99,7 @@ const form = ref(null);
 const formState = reactive({
     name: "",
     file: undefined,
-    output: "{}",
+    output: "[]",
     input: "{}",
 });
 const nameRules = [(value) => !!value || "Name is required"];
