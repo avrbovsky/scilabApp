@@ -30,13 +30,6 @@
           :loading="isPending"
         />
       </div>
-      <v-snackbar
-        v-model="snackbar"
-        :color="snackbarColor"
-        rounded="pill"
-      >
-        {{ snackbarText }}
-      </v-snackbar>
       <graph-component :data="graphData" />
     </v-card-text>
   </v-card>
@@ -49,6 +42,7 @@ import { useExperimentSaveMutation } from '../../api/queries/experimentQueries';
 import CreateForm from './components/CreateForm.vue';
 import HeaderComponent from './components/HeaderComponent.vue';
 import GraphComponent from './components/GraphComponent.vue';
+import { useNotificationStore } from '@/stores/NotificationService';
 
 const route = useRoute();
 const isEditView = ref(route.path.includes('edit'));
@@ -56,9 +50,7 @@ const title = computed(()=> isEditView.value ? 'Edit View' : 'Create View');
 
 const createFormRef = ref(null);
 const { isPending, mutateAsync } = useExperimentSaveMutation();
-const snackbar = ref(false);
-const snackbarColor = ref("success");
-const snackbarText = ref("Experiment created successfully");
+const { showSnackbar } = useNotificationStore();
 
 const graphData = ref([]);
 
@@ -74,18 +66,13 @@ const onSaveClicked = async () => {
         output: createFormRef.value.formState.output,
       });
       
-      snackbarText.value = "Experiment created successfully";
-      snackbarColor.value = "success";
-      snackbar.value = true;
+      showSnackbar("Experiment created successfully", "success");
       createFormRef.value.form.reset();
       graphData.value = data.simulation;
 
     } catch (err) {
-      snackbarText.value = "There was an error when creating Experiment";
-      snackbarColor.value = "error";
-      snackbar.value = true;
+      showSnackbar("There was an error when creating Experiment", "error");
     }
-    
   }
 };
 </script>
