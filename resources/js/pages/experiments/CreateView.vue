@@ -104,14 +104,56 @@ const formState = reactive({
 });
 const nameRules = [(value) => !!value || "Name is required"];
 const fileRules = [(value) => !value || !!value.length || "Experiment schema is required"];
-const outputRules = [(value) => isJsonString(value) || "Output is not a valid JSON"];
-const inputRules = [(value) => isJsonString(value) || "Input is not a valid JSON"];
+const outputRules = [(value) => isArrayString(value) || "Output is not a valid Array",
+                      (value) => onlyStrings(value) || "Output must contain only strings",
+                      (value) => containsUnique(value) || "Output must contain unique strings"
+                    ];
+const inputRules = [(value) => isJsonString(value) || "Input is not a valid JSON",
+                    (value) => onlyNumbersAsValue(value) || "Input must contain only numbers as values"];
 
 const graphData = ref([]);
 
+const onlyUnique = (value, index, array) => {
+  return array.indexOf(value) === index;
+};
+
+const containsUnique = (arrayString) => {
+  const array = JSON.parse(arrayString);
+  const uniqueArray = array.filter(onlyUnique);
+  return uniqueArray.length === array.length;
+};
+
+const onlyStrings = (arrayString) => {
+  const array = JSON.parse(arrayString);
+  const notString = array.find(item=> typeof item !== "string");
+
+  return !notString;
+};
+
+const isArrayString = (arrayString) => {
+  try {
+        const o = JSON.parse(arrayString);
+
+        if (o && typeof o === "object" && Array.isArray(o)) {
+            return true;
+        }
+    }
+    catch (e) { /* empty */ }
+
+    return false;
+};
+
+const onlyNumbersAsValue = (jsonString) => {
+  const o = JSON.parse(jsonString);
+  const values = Object.values(o);
+  const notNumber = values.find(item => typeof item !== "number");
+
+  return notNumber === undefined;
+};
+
 const isJsonString = (jsonString) => {
   try {
-        var o = JSON.parse(jsonString);
+        const o = JSON.parse(jsonString);
 
         if (o && typeof o === "object") {
             return true;
