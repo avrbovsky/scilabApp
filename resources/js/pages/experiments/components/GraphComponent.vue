@@ -1,9 +1,12 @@
 <template>
-  <apexchart
-    :options="options"
-    :series="dataSeries"
-    type="line"
-  />
+  <div>
+    <span class="text-h4">Experiment result:</span>
+    <apexchart
+      :options="options"
+      :series="dataSeries"
+      type="line"
+    />
+  </div>
 </template>
 
 <script setup>

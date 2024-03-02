@@ -35,5 +35,19 @@ const experimentCreate = async (experimentData) => {
     }
 };
 
+const experimentDetail = async (experimentId) => {
+    const url = `/experiments/${experimentId}`;
+    
+    try {
+        const { data } = await api.get(url);
+        return data;
+    } catch(err) {
+        console.error(err.message);
+        
+        return err;
+    }
+};
+
 export const useExperimentsListMutation = () => useMutation({mutationFn: experimentsList});
 export const useExperimentSaveMutation = () => useMutation({mutationFn: experimentCreate});
+export const useExperimentDetailMutation = () => useMutation({mutationFn: experimentDetail});
