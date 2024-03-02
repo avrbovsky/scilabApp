@@ -10,6 +10,7 @@
       <v-overlay
         v-model="showOverlay"
         class="align-center justify-center rounded-lg"
+        :close-on-back="false"
         contained
       >
         <div class="graph-no-data pa-4 rounded-lg text-h2">
