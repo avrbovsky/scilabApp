@@ -1,11 +1,22 @@
 <template>
   <div>
     <span class="text-h4">Experiment result:</span>
-    <apexchart
-      :options="options"
-      :series="dataSeries"
-      type="line"
-    />
+    <div class="experiment-graf">
+      <apexchart
+        :options="options"
+        :series="dataSeries"
+        type="line"
+      />
+      <v-overlay
+        v-model="showOverlay"
+        class="align-center justify-center rounded-lg"
+        contained
+      >
+        <div class="graph-no-data pa-4 rounded-lg text-h2">
+          No Data For Graph
+        </div>
+      </v-overlay>
+    </div>
   </div>
 </template>
 
@@ -18,6 +29,8 @@ const props = defineProps({
         required: true
     }
 });
+
+const showOverlay = computed(()=>props.data.length === 0);
 
 const dataSeries = computed(()=> {
     if(!props.data.length){
@@ -69,3 +82,13 @@ const options = computed(()=>({
     },
 }));
 </script>
+
+<style scoped>
+.experiment-graf {
+    position: relative;
+}
+
+.graph-no-data{
+    background-color: rgba(255,255,255, 0.8);
+}
+</style>
