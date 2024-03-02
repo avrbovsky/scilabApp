@@ -63,7 +63,7 @@ const experimentsMapped = computed(()=>{
 
 const loadItems = ({ page, itemsPerPage, sortBy }) => {
   mutateAsync({page, itemsPerPage, sortBy: sortBy && sortBy[0]}).then((data) => {
-    if(data){
+    if(data?.experiments){
       experiments.value = data.experiments.data;
       totalItems.value = data.experiments.total;
     }
