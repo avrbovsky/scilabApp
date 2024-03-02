@@ -18,7 +18,7 @@
         :items="experimentsMapped"
         :items-length="totalItems"
         :loading="isPending"
-        @row:click="onRowClick"
+        @click:row="onRowClick"
         @update:options="loadItems"
       />
     </v-card-text>
