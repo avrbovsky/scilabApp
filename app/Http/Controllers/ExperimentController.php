@@ -326,8 +326,7 @@ class ExperimentController extends Controller
 
         try{
             $experiment = Experiment::findOrFail($id);
-            $filePath = $experiment->file_name;
-            // $filePath = $experiment->get('file_name');
+            $filePath = $experiment->file_path;
 
             return Storage::response($filePath);
         } catch(\Exception $_){
@@ -540,32 +539,51 @@ class ExperimentController extends Controller
             return response()->json(['errors' => $validator->errors()], 400);
         }
 
-        // get experiment
-
-        $input_values = json_decode($request->input('context'));
-
-        $context = "";
-        foreach ($input_values as $key => $value) {
-            $context .= "Context.{$key}={$value};";
-        }
-
-        $script = "ssh -i ~/.ssh/id_rsa -p 2222 -q -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\" root@localhost 'SCRIPT=\"loadXcosLibs();loadScicos();importXcosDiagram('\'/opt/bp-app/1622619815_1619954846_tcn.zcos\'');Context=struct();" . $context . "scicos_simulate(scs_m,list(),Context,'\'nw\'');\" export SCRIPT;' /opt/bp-app/run-script.sh";
-
-        $result = shell_exec($script);
+        $experiment = "";
         
-        $result = explode("\n\n", $result);
-        array_shift($result);
+        try{
+            $experiment = Experiment::findOrFail($id);
 
-        $result_array = [];
-        foreach ($result as $string) {
-            $string = trim($string);
-            $values = array_map(function($item) {
-                return floatval(trim($item));
-            }, explode("\n", $string));
+            $output_values = json_decode($experiment->output);
+            $input_values = json_decode($request->input('context'));
 
-            array_push($result_array, $values);
+            $context = "";
+            foreach ($input_values as $key => $value) {
+                $context .= "Context.{$key}={$value};";
+            }
+
+            $script = "ssh -i ~/.ssh/id_rsa -p 2222 -q -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\" root@localhost 'SCRIPT=\"loadXcosLibs();loadScicos();importXcosDiagram('\'/opt/bp-app/1622619815_1619954846_tcn.zcos\'');Context=struct();" . $context . "scicos_simulate(scs_m,list(),Context,'\'nw\'');\" export SCRIPT;' /opt/bp-app/run-script.sh";
+
+            $result = shell_exec($script);
+            
+            $result = explode("\n\n", $result);
+            array_shift($result);
+
+            $result_array = [];
+            foreach ($result as $string) {
+                $string = trim($string);
+                $values = array_map(function($item) {
+                    return floatval(trim($item));
+                }, explode("\n", $string));
+
+                $values_count = count($values);
+                $output_count = count($output_values);
+
+                if($values_count <= $output_count){
+                    $obj = [];
+                    for($i = 0; $i < $values_count; $i++){
+                        $obj[$output_values[$i]] = $values[$i];
+                    }
+
+                    array_push($result_array, $obj);
+                } else {
+                    array_push($result_array, $values);
+                }
+            }
+
+            return response()->json(["simulation"=>$result_array], 201);
+        } catch(\Exception $_){
+            return response()->json(["message"=>"There is no experiment with that id."], 400);
         }
-
-        return response()->json(["simulation"=>$result_array], 201);
     }
 }
