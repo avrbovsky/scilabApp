@@ -79,11 +79,12 @@ const handleSubmit = async (context) => {
     try {
         const { simulation } = await simulate({
             context,
+            id: route.params.id,
         });
 
         showSnackbar("Experiment simulated successfully", "success");
         graphData.value = simulation;
-    } catch (err) {
+    } catch (_) {
         showSnackbar("There was an error when simulating Experiment", "error");
     }
 };
