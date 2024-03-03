@@ -9,17 +9,19 @@ export const useAuthStore = defineStore(
         const token = ref("");
 
         const { mutateAsync } = useCurrentLoggedUserMutation();
-        mutateAsync().then((data) => {
-            if (data) {
-                const userData = data.data;
+        if (token.value) {
+            mutateAsync().then((data) => {
+                if (data) {
+                    const userData = data.data;
 
-                delete userData.created_at;
-                delete userData.email_verified_at;
-                delete userData.updated_at;
+                    delete userData.created_at;
+                    delete userData.email_verified_at;
+                    delete userData.updated_at;
 
-                currentLoggedUser.value = userData;
-            }
-        });
+                    currentLoggedUser.value = userData;
+                }
+            });
+        }
 
         const signIn = (signedInUser, newToken) => {
             currentLoggedUser.value = signedInUser;
