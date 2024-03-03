@@ -4,7 +4,10 @@
       :back-button="true"
       title="Detail View"
     >
-      <v-btn icon>
+      <v-btn
+        v-if="data?.experiment?.created_by === currentLoggedUser.id"
+        icon
+      >
         <v-icon>mdi-pencil</v-icon>
       </v-btn>
     </header-component>
@@ -62,18 +65,22 @@ import {
 import { useNotificationStore } from "@/stores/NotificationService";
 import HeaderComponent from "./components/HeaderComponent.vue";
 import GraphComponent from "./components/GraphComponent.vue";
+import { useAuthStore } from "@/stores/Auth";
+import { storeToRefs } from "pinia";
 
 const route = useRoute();
 const { id } = route.params;
 const graphData = ref([]);
+const authStore = useAuthStore();
+const { currentLoggedUser } = storeToRefs(authStore);
 const { data, mutateAsync } = useExperimentDetailMutation();
 const { mutateAsync: simulate, isPending: isPendingSimulation } =
     useExperimentSimulateMutation();
 const { showSnackbar } = useNotificationStore();
 
 onMounted(async () => {
-    const { experiment } = await mutateAsync(id);
-    experimentInput.value = experiment.context;
+    await mutateAsync(id);
+    experimentInput.value = data?.experiment?.context;
 });
 
 const form = ref(null);
