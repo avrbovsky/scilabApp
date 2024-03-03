@@ -7,6 +7,7 @@
       <v-btn
         v-if="data?.experiment?.created_by === currentLoggedUser.id"
         icon
+        :to="`/experiments/${data?.experiment?.id}/edit`"
       >
         <v-icon>mdi-pencil</v-icon>
       </v-btn>
@@ -39,7 +40,7 @@
 
 <script setup>
 import { useRoute } from "vue-router";
-import { onMounted, ref } from "vue";
+import { onMounted, watch, ref } from "vue";
 import {
     useExperimentDetailMutation,
     useExperimentSimulateMutation,
@@ -54,15 +55,24 @@ import SimulateForm from "./components/SimulateForm.vue";
 const route = useRoute();
 const { id } = route.params;
 const graphData = ref([]);
+
 const authStore = useAuthStore();
 const { currentLoggedUser } = storeToRefs(authStore);
+
 const { data, mutateAsync } = useExperimentDetailMutation();
 const { mutateAsync: simulate, isPending: isPendingSimulation } =
     useExperimentSimulateMutation();
 
 const { showSnackbar } = useNotificationStore();
+
 onMounted(async () => {
     mutateAsync(id);
+});
+
+watch(route, () => {
+    if (route.params.id) {
+        mutateAsync(route.params.id);
+    }
 });
 
 const handleSubmit = async (context) => {
