@@ -15,10 +15,12 @@ class RefreshTokenMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = auth()->user();
-        $user->currentAccessToken()->update([
-            'expires_at' => now()->addMinutes(config('sanctum.refresh_by')),
-        ]);
+        if (auth()->check()) {
+            $user = auth()->user();
+            $user->currentAccessToken()->update([
+                'expires_at' => now()->addMinutes(config('sanctum.refresh_by')),
+            ]);
+        }
 
         return $next($request);
     }

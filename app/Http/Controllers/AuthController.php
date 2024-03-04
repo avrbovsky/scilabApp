@@ -72,7 +72,7 @@ class AuthController extends Controller
             ]);
 
             $expiresAt = new \DateTime();
-            $expiresAt->add(new \DateInterval('PT' + config('sanctum.refresh_by') + 'M'));
+            $expiresAt->add(new \DateInterval('PT' . config('sanctum.refresh_by') . 'M'));
 
             return response()->json([
                 'message' => 'User Created Successfully',
@@ -150,7 +150,7 @@ class AuthController extends Controller
 
             $user = User::where('email', $request->email)->first();
             $expiresAt = new \DateTime();
-            $expiresAt->add(new \DateInterval('PT' + config('sanctum.refresh_by') + 'M'));
+            $expiresAt->add(new \DateInterval('PT' . config('sanctum.refresh_by') . 'M'));
 
             return response()->json([
                 'message' => 'User Logged In Successfully',
