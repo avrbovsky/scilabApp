@@ -11,5 +11,7 @@ fi
 php artisan migrate
 php artisan key:generate
 
-php artisan serve --port=$PORT --host=0.0.0.0 --env=.env
+php artisan serve --port=$PORT --host=0.0.0.0 --env=.env &
+
+npm run dev
 exec docker-php-entrypoint "$@"
