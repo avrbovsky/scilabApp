@@ -1,0 +1,46 @@
+FROM ubuntu:18.04
+
+# Install PHP and other laravel dependencies
+RUN apt-get update \
+    && apt full-upgrade --quiet --yes \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    php \
+    php-fpm \
+    php-mysql \
+    nginx \
+    git \
+    unzip \
+    curl \
+    && apt-get clean
+
+# Install PHP dependencies
+RUN docker-php-ext-install pdo pdo_mysql
+
+# # Install scilab
+# RUN cd /tmp \
+#     && apt install -y wget libx11-6 libjogl2-java \
+#     && wget https://gitlab.com/scilab/scilab/-/archive/2024.0.0/scilab-2024.0.0.tar.gz \
+#     && tar -xzf scilab-2024.0.0.tar.gz \
+#     && mv scilab-2024.0.0/ /opt/scilab \
+#     && chown -R root:root /opt/scilab \
+#     && rm scilab-2024.0.0.tar.gz \
+#     && mkdir -p /scripts
+
+# # Copy run-script for executing scilab simulations
+# COPY docker/run-script.sh /scripts/
+# COPY docker/test-script.sh /scripts/
+
+# # Add permissions for running scripts and accessing /var/www
+# RUN chown -R root:root /root/ \
+#     && chmod +x /scripts/run-script.sh \
+#     && chmod +x /scripts/test-script.sh \
+#     && chown -R www-data:www-data /var/www
+
+WORKDIR /var/www
+COPY . .
+
+# Install composer
+COPY --from=composer:2.7.1 /usr/bin/composer /usr/bin/composer
+
+ENV PORT=8000
+ENTRYPOINT [ "docker/entrypoint-install.sh" ]

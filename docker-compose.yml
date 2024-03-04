@@ -7,9 +7,7 @@ services:
         volumes:
             - "./storage/app/experiment_files:/var/lib/scilab-app/storage/app/experiment_files"
         ports:
-            - 2222:22
-        expose:
-            - 2222
+            - 8000:8000
         depends_on:
             - database
 
