@@ -37,12 +37,12 @@ RUN apt install -y nodejs
 
 # Install scilab
 RUN cd /tmp \
-    && apt install -y wget libx11-6 libjogl2-java \
-    && wget https://gitlab.com/scilab/scilab/-/archive/2024.0.0/scilab-2024.0.0.tar.gz \
-    && tar -xzf scilab-2024.0.0.tar.gz \
-    && mv scilab-2024.0.0/ /opt/scilab \
+    && apt install -y wget libx11-6 libjogl2-java libtinfo5 \
+    && wget https://www.scilab.org/download/6.1.1/scilab-6.1.1.bin.linux-x86_64.tar.gz \
+    && tar -xzf scilab-6.1.1.bin.linux-x86_64.tar.gz \
+    && mv scilab-6.1.1/ /opt/scilab \
     && chown -R root:root /opt/scilab \
-    && rm scilab-2024.0.0.tar.gz \
+    && rm scilab-6.1.1.bin.linux-x86_64.tar.gz \
     && mkdir -p /scripts
 
 # Copy run-script for executing scilab simulations
@@ -54,8 +54,10 @@ RUN chown -R root:root /root/ \
     && chmod +x /scripts/run-script.sh \
     && chmod +x /scripts/test-script.sh
 
+RUN mkdir scilabApp
+
 # Setup Laravel
-WORKDIR /var/www/html
+WORKDIR /var/www/html/scilabApp
 COPY . .
 RUN chown -R www-data:www-data /var/www/html
 

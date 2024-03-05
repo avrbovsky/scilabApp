@@ -6,6 +6,7 @@ services:
             dockerfile: docker/Dockerfile
         volumes:
             - "./storage/app/experiment_files:/var/lib/scilab-app/storage/app/experiment_files"
+        restart: always
         ports:
             - 8000:8000
         depends_on:
@@ -21,14 +22,9 @@ services:
             - MYSQL_USER=${DB_USERNAME}
             - MYSQL_PASSWORD=${DB_PASSWORD}
             - MYSQL_RANDOM_ROOT_PASSWORD=yes
-        volumes:
-            - db-data:/var/lib/mysql
 
     adminer:
         image: adminer
         restart: always
         ports:
             - 8080:8080
-
-volumes:
-    db-data: ~
