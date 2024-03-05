@@ -13,5 +13,5 @@ php artisan key:generate
 
 php artisan serve --port=$PORT --host=0.0.0.0 --env=.env &
 
-npm run dev
+npm run dev -- --host
 exec docker-php-entrypoint "$@"

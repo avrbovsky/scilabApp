@@ -35,9 +35,9 @@ RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesourc
 RUN apt update
 RUN apt install -y nodejs
 
-# Install scilab
+# Install scilab and its dependencies
 RUN cd /tmp \
-    && apt install -y wget libx11-6 libjogl2-java libtinfo5 \
+    && apt install -y wget libx11-6 libjogl2-java libtinfo5 libxft2 \
     && wget https://www.scilab.org/download/6.1.1/scilab-6.1.1.bin.linux-x86_64.tar.gz \
     && tar -xzf scilab-6.1.1.bin.linux-x86_64.tar.gz \
     && mv scilab-6.1.1/ /opt/scilab \
