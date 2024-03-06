@@ -1,8 +1,8 @@
-FROM ubuntu:latest AS base
+FROM ubuntu:22.04 AS base
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# Install dependencies
+# Install Laravel dependencies
 RUN apt update
 RUN apt install -y software-properties-common
 RUN add-apt-repository -y ppa:ondrej/php
@@ -20,9 +20,7 @@ RUN apt install -y php8.2\
     php8.2-bcmath\
     php8.2-pdo
 
-# # Install PHP fpm and cli for speed up
-# RUN apt install -y php8.2-fpm php8.2-cli
-
+# Install composer for Laravel
 RUN apt install -y curl && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 

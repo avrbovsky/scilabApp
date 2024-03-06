@@ -402,7 +402,7 @@ class ExperimentController extends Controller
                 $context .= "Context.{$key}={$value};";
             }
             
-            $script = "ssh -i ~/.ssh/id_rsa -p 2222 -q -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\" root@localhost 'SCRIPT=\"loadXcosLibs();loadScicos();importXcosDiagram('\'/opt/bp-app/1622619815_1619954846_tcn.zcos\'');Context=struct();" . $context . "scicos_simulate(scs_m,list(),Context,'\'nw\'');\" export SCRIPT;' /opt/bp-app/run-script.sh";
+            $script = "SCRIPT=\"loadXcosLibs();loadScicos();importXcosDiagram('/var/www/html/scilabApp/storage/app/" . $filePath . "');Context=struct();" . $context . "scicos_simulate(scs_m,list(),Context,'nw');\" /var/www/html/scilabApp/docker/run-script.sh";
 
             $result = shell_exec($script);
 
@@ -552,8 +552,9 @@ class ExperimentController extends Controller
             foreach ($input_values as $key => $value) {
                 $context .= "Context.{$key}={$value};";
             }
+            $filePath = $experiment->file_path;
 
-            $script = "ssh -i ~/.ssh/id_rsa -p 2222 -q -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\" root@localhost 'SCRIPT=\"loadXcosLibs();loadScicos();importXcosDiagram('\'/opt/bp-app/1622619815_1619954846_tcn.zcos\'');Context=struct();" . $context . "scicos_simulate(scs_m,list(),Context,'\'nw\'');\" export SCRIPT;' /opt/bp-app/run-script.sh";
+            $script = "SCRIPT=\"loadXcosLibs();loadScicos();importXcosDiagram('/var/www/html/scilabApp/storage/app/" . $filePath . "');Context=struct();" . $context . "scicos_simulate(scs_m,list(),Context,'nw');\" /var/www/html/scilabApp/docker/run-script.sh";
 
             $result = shell_exec($script);
             
