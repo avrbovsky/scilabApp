@@ -7,13 +7,13 @@
     <v-list-item
       href="/#/experiments/add"
       prepend-icon="mdi-plus-circle"
-      title="Create experiment"
+      :title="$t('CreateExperiment')"
       value="addExperiment"
     />
     <v-list-item
       href="/#/experiments"
       prepend-icon="mdi-list-box"
-      title="Experiment List"
+      :title="$t('ExperimentList')"
       value="experiments"
     />
   </v-list>

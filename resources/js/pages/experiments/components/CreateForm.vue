@@ -6,7 +6,7 @@
     <v-text-field
       v-model="formState.name"
       class="mb-4"
-      label="Name"
+      :label="$t('ExperimentName')"
       prepend-icon="mdi-rename-outline"
       required
       :rules="nameRules"
@@ -17,7 +17,7 @@
       accept=".zcos"
       chips
       :class="{ 'mb-4': !file }"
-      label="Experiment file"
+      :label="$t('ExperimentSchema')"
       required
       :rules="fileRules"
       variant="outlined"
@@ -31,14 +31,14 @@
     <v-textarea
       v-model="formState.output"
       class="mb-4"
-      label="Output object"
+      :label="$t('ExperimentOutput')"
       prepend-icon="mdi-code-brackets"
       :rules="outputRules"
       variant="outlined"
     />
     <v-textarea
       v-model="formState.input"
-      label="Input object"
+      :label="$t('ExperimentContext')"
       prepend-icon="mdi-code-json"
       :rules="inputRules"
       variant="outlined"
@@ -47,6 +47,7 @@
 </template>
 
 <script setup>
+import { trans } from "laravel-vue-i18n";
 import { reactive, watch } from "vue";
 import { ref } from "vue";
 
@@ -86,7 +87,7 @@ defineExpose({
     file,
 });
 
-const nameRules = [(value) => !!value || "Name is required"];
+const nameRules = [(value) => !!value || trans("ExperimentNameError")];
 const fileRules = [
     (value) =>
         !value ||
@@ -95,15 +96,13 @@ const fileRules = [
         "Experiment schema is required",
 ];
 const outputRules = [
-    (value) => isArrayString(value) || "Output is not a valid Array",
-    (value) => onlyStrings(value) || "Output must contain only strings",
-    (value) => containsUnique(value) || "Output must contain unique strings",
+    (value) => isArrayString(value) || trans("ExperimentOutputArrayError"),
+    (value) => onlyStrings(value) || trans("ExperimentOutputStringsError"),
+    (value) =>
+        containsUnique(value) || trans("ExperimentOutputUniqueStringError"),
 ];
 const inputRules = [
-    (value) => isJsonString(value) || "Input is not a valid JSON",
-    (value) =>
-        onlyNumbersAsValue(value) ||
-        "Input must contain only numbers as values",
+    (value) => isJsonString(value) || trans("ExperimentContextError"),
 ];
 
 const onlyUnique = (value, index, array) => {
@@ -135,14 +134,6 @@ const isArrayString = (arrayString) => {
     }
 
     return false;
-};
-
-const onlyNumbersAsValue = (jsonString) => {
-    const o = JSON.parse(jsonString);
-    const values = Object.values(o);
-    const notNumber = values.find((item) => typeof item !== "number");
-
-    return notNumber === undefined;
 };
 
 const isJsonString = (jsonString) => {

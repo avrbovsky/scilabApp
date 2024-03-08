@@ -8,7 +8,7 @@
   >
     <v-textarea
       v-model="experimentInput"
-      label="Input object"
+      :label="$t('ExperimentContext')"
       prepend-icon="mdi-code-json"
       :rules="inputRules"
       variant="outlined"
@@ -18,13 +18,14 @@
         :disabled="loading"
         type="submit"
       >
-        Simulate
+        {{ $t("Simulate") }}
       </v-btn>
     </div>
   </v-form>
 </template>
 
 <script setup>
+import { trans } from "laravel-vue-i18n";
 import { ref, watch } from "vue";
 
 const props = defineProps({
@@ -50,10 +51,7 @@ watch(props, () => {
 });
 
 const inputRules = [
-    (value) => isJsonString(value) || "Input is not a valid JSON",
-    (value) =>
-        onlyNumbersAsValue(value) ||
-        "Input must contain only numbers as values",
+    (value) => isJsonString(value) || trans("ExperimentContextError"),
 ];
 
 const isJsonString = (jsonString) => {
@@ -68,14 +66,6 @@ const isJsonString = (jsonString) => {
     }
 
     return false;
-};
-
-const onlyNumbersAsValue = (jsonString) => {
-    const o = JSON.parse(jsonString);
-    const values = Object.values(o);
-    const notNumber = values.find((item) => typeof item !== "number");
-
-    return notNumber === undefined;
 };
 
 const onSubmit = () => {

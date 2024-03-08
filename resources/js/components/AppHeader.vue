@@ -2,7 +2,7 @@
   <v-app-bar elevation="2">
     <template #title>
       <v-app-bar-title class="font-weight-bold">
-        Application Bar
+        {{ $t("Title") }}
       </v-app-bar-title>
     </template>
   </v-app-bar>

@@ -2,7 +2,7 @@
   <v-card class="h-100">
     <header-component
       :back-button="true"
-      title="Detail View"
+      :title="$t('ExperimentDetailTitle')"
     >
       <v-btn
         v-if="data?.experiment?.created_by === currentLoggedUser.id"
@@ -20,7 +20,7 @@
           </div>
           <v-spacer />
           <div class="text-h5">
-            <span class="font-weight-thin">By:</span>
+            <span class="font-weight-thin">{{ $t("By") }}:</span>
             <span>{{ data?.experiment?.created_by }}</span>
           </div>
         </div>
@@ -39,6 +39,7 @@
 </template>
 
 <script setup>
+import { trans } from "laravel-vue-i18n";
 import { useRoute } from "vue-router";
 import { onMounted, watch, ref } from "vue";
 import {
@@ -82,10 +83,10 @@ const handleSubmit = async (context) => {
             id: route.params.id,
         });
 
-        showSnackbar("Experiment simulated successfully", "success");
+        showSnackbar(trans("ExperimentSimulationSuccess"), "success");
         graphData.value = simulation;
     } catch (_) {
-        showSnackbar("There was an error when simulating Experiment", "error");
+        showSnackbar(trans("ExperimentSimulationError"), "error");
     }
 };
 </script>

@@ -39,6 +39,7 @@
 </template>
 
 <script setup>
+import { trans } from "laravel-vue-i18n";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import CreateForm from "./components/CreateForm.vue";
@@ -52,7 +53,9 @@ import { useNotificationStore } from "@/stores/NotificationService";
 
 const route = useRoute();
 const isEditView = ref(route.path.includes("edit"));
-const title = computed(() => (isEditView.value ? "Edit View" : "Create View"));
+const title = computed(() =>
+    isEditView.value ? trans("EditExperiment") : trans("CreateExperiment")
+);
 
 const createFormRef = ref(null);
 
@@ -98,9 +101,9 @@ const onSaveClicked = async () => {
                 output: createFormRef.value.formState.output,
             });
 
-            const snackbarMessage = `Experiment ${
-                isEditView.value ? "updated" : "created"
-            } successfully`;
+            const snackbarMessage = isEditView.value
+                ? trans("ExperimentEditSuccess")
+                : trans("ExperimentCreateSuccess");
             showSnackbar(snackbarMessage, "success");
 
             if (!isEditView.value) {
@@ -108,9 +111,9 @@ const onSaveClicked = async () => {
             }
             graphData.value = data.simulation;
         } catch (err) {
-            const snackbarMessage = `There was an error when ${
-                isEditView.value ? "updating" : "creating"
-            } Experiment`;
+            const snackbarMessage = isEditView.value
+                ? trans("ExperimentEditError")
+                : trans("ExperimentCreateError");
             showSnackbar(snackbarMessage, "error");
         }
     }

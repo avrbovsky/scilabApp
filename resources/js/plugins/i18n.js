@@ -9,7 +9,7 @@ const i18nConfig = {
             console.error(
                 `Could not load ${lang}, falling back to default language.`
             );
-            const fallbackLang = "en";
+            const fallbackLang = "sk";
             const fallbackLangModule = await langs[
                 `../../../lang/${fallbackLang}.json`
             ]();
