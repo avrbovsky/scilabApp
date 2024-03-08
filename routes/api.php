@@ -35,4 +35,5 @@ Route::middleware(['auth:sanctum', 'token.refresh'])->group(function () {
     Route::post('experiments/{id}', [ExperimentController::class, 'update']);
 
     Route::get('user/{id}', [UserController::class, 'show']);
+    Route::get('users', [UserController::class, 'index']);
 });
