@@ -86,7 +86,12 @@ const onRowClick = (_, { item }) => {
     display: flex !important;
     flex-direction: column;
 }
+
 .v-card-text {
     overflow: scroll;
+}
+
+.v-table {
+    height: 100%;
 }
 </style>
