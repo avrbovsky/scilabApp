@@ -8,11 +8,15 @@
         {{ $t("Title") }}
       </v-app-bar-title>
     </template>
+    <template #append>
+      <language-menu />
+    </template>
   </v-app-bar>
 </template>
 
 <script setup>
 import { defineEmits } from "vue";
+import LanguageMenu from "./LanguageMenu.vue";
 
 const emit = defineEmits(["toggle"]);
 </script>

@@ -1,4 +1,5 @@
 const i18nConfig = {
+    lang: "sk",
     resolve: async (lang) => {
         const langs = import.meta.glob("../../../lang/*.json");
 
