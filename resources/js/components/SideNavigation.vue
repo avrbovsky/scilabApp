@@ -33,7 +33,7 @@ import LogoutBtn from "@/components/LogoutBtn.vue";
 
 const authStore = useAuthStore();
 const { currentLoggedUser } = storeToRefs(authStore);
-const isDrawerOpen = ref(true);
+const isDrawerOpen = ref(window.innerWidth >= 1280);
 
 defineExpose({
     isDrawerOpen,
