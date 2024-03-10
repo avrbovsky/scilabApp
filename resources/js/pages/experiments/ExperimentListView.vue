@@ -114,7 +114,7 @@ const router = useRouter();
 const { isPending, mutateAsync } = useExperimentsListMutation();
 const { data } = useUserListQuery();
 const itemsPerPage = ref(10);
-const headers = [
+const headers = computed(() => [
     {
         title: "ID",
         align: "start",
@@ -127,7 +127,7 @@ const headers = [
     },
     { title: trans("CreatedBy"), key: "created_by", align: "start" },
     { title: trans("CreatedAt"), key: "created_at", align: "end" },
-];
+]);
 
 const handleResize = () => {
     windowWidth.value = window.innerWidth;
