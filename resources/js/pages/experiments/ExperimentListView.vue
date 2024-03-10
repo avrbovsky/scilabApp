@@ -13,6 +13,7 @@
       <v-data-table-server
         v-model:items-per-page="itemsPerPage"
         class="px-4"
+        fixed-header
         :headers="headers"
         :hover="true"
         :items="experimentsMapped"
@@ -20,20 +21,94 @@
         :loading="isPending"
         @click:row="onRowClick"
         @update:options="loadItems"
-      />
+      >
+        <!-- CODE IS INSPIRED FROM JAKUB MATISAK -->
+        <template
+          v-if="windowWidth < 768"
+          #headers="{ columns, isSorted, getSortIcon, toggleSort }"
+        >
+          <v-expansion-panels variant="accordion">
+            <v-expansion-panel
+              elevation="1"
+              :title="$t('Sort by headers')"
+            >
+              <v-expansion-panel-text>
+                <v-list>
+                  <v-list-item
+                    v-for="item in columns"
+                    :key="item.key"
+                    :title="item.title"
+                    :value="item"
+                    @click.stop="
+                      item.sortable
+                        ? toggleSort(item)
+                        : null
+                    "
+                  >
+                    <template
+                      v-if="isSorted(item)"
+                      #append
+                    >
+                      <v-icon :icon="getSortIcon(item)" />
+                    </template>
+                  </v-list-item>
+                </v-list>
+              </v-expansion-panel-text>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </template>
+
+        <template
+          v-if="windowWidth < 768"
+          #body="{ internalItems, items, headers }"
+        >
+          <tr
+            v-if="items.length === 0"
+            class="text-center"
+          >
+            <td>{{ $t("No data to display") }}</td>
+          </tr>
+          <tr
+            v-for="(item, i) in internalItems"
+            v-else
+            :key="i"
+            @click.stop="onActiveItem(item.raw.original)"
+          >
+            <td>
+              <ul class="mobile-grid-content">
+                <li
+                  v-for="(column, j) in Object.keys(
+                    item.columns
+                  )"
+                  :key="j"
+                  class="mobile-grid-item"
+                >
+                  <div class="mobile-grid-item-bolder">
+                    {{ headers[0][j].title }}
+                  </div>
+                  <div class="mobile-grid-item-value">
+                    {{ item.columns[column] }}
+                  </div>
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </template>
+      </v-data-table-server>
     </v-card-text>
   </v-card>
 </template>
 
 <script setup>
 import { trans } from "laravel-vue-i18n";
-import { computed, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useExperimentsListMutation } from "@/api/queries/experimentQueries";
 import { useUserListQuery } from "@/api/queries/userQueries";
 import HeaderComponent from "./components/HeaderComponent.vue";
 import { useDate } from "vuetify";
 
+const windowWidth = ref(window.innerWidth);
 const date = useDate();
 const router = useRouter();
 const { isPending, mutateAsync } = useExperimentsListMutation();
@@ -53,6 +128,18 @@ const headers = [
     { title: trans("CreatedBy"), key: "created_by", align: "start" },
     { title: trans("CreatedAt"), key: "created_at", align: "end" },
 ];
+
+const handleResize = () => {
+    windowWidth.value = window.innerWidth;
+};
+
+onMounted(() => {
+    window.addEventListener("resize", handleResize);
+});
+
+onUnmounted(() => {
+    window.removeEventListener("resize", handleResize);
+});
 
 const experiments = ref([]);
 const totalItems = ref(0);
@@ -90,7 +177,7 @@ const onRowClick = (_, { item }) => {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .v-card {
     display: flex !important;
     flex-direction: column;
@@ -102,5 +189,34 @@ const onRowClick = (_, { item }) => {
 
 .v-table {
     height: 100%;
+
+    :deep(.v-data-table__th) {
+        font-weight: bold;
+    }
+}
+
+.mobile-grid-content {
+    list-style-type: none;
+    padding: 1rem 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+
+    .mobile-grid-item {
+        display: flex;
+        justify-content: space-between;
+        min-height: 1.5rem;
+        padding: 0.25rem 1rem;
+        width: 100%;
+
+        .mobile-grid-item-bolder {
+            font-weight: bold;
+        }
+
+        .mobile-grid-item-value {
+            text-align: right;
+        }
+    }
 }
 </style>
