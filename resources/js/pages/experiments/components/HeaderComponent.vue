@@ -13,7 +13,6 @@
     <v-toolbar-title class="text-h4">
       {{ title }}
     </v-toolbar-title>
-    <v-spacer />
     <slot />
   </v-toolbar>
 </template>
@@ -22,17 +21,17 @@
 defineProps({
     title: {
         type: String,
-        required: true
+        required: true,
     },
     backButton: {
         type: Boolean,
-        default: false
-    }
+        default: false,
+    },
 });
 </script>
 
 <style scoped>
 .v-toolbar {
-  border-bottom: 1px solid black;
+    border-bottom: 1px solid black;
 }
 </style>
