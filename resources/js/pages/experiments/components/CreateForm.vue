@@ -175,6 +175,7 @@ const removeOutputItem = (idx) => {
     const items = [...formState.outputItems];
     items.splice(idx, 1);
     formState.outputItems = items;
+    onOutputItemsChange();
 };
 
 const addOutputItem = () => {
