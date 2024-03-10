@@ -26,13 +26,11 @@
       />
     </template>
     <v-card-text class="py-8">
-      <div class="ma-auto w-50">
-        <create-form
-          ref="createFormRef"
-          :experiment="experiment"
-          :loading="isPending"
-        />
-      </div>
+      <create-form
+        ref="createFormRef"
+        :experiment="experiment"
+        :loading="isPending"
+      />
       <v-container>
         <graph-component :data="graphData" />
       </v-container>

@@ -3,46 +3,61 @@
     ref="form"
     :disabled="loading"
   >
-    <v-text-field
-      v-model="formState.name"
-      class="mb-4"
-      :label="$t('ExperimentName')"
-      prepend-icon="mdi-rename-outline"
-      required
-      :rules="nameRules"
-      variant="outlined"
-    />
-    <v-file-input
-      v-model="formState.file"
-      accept=".zcos"
-      chips
-      :class="{ 'mb-4': !file }"
-      :label="$t('ExperimentSchema')"
-      required
-      :rules="fileRules"
-      variant="outlined"
-    />
-    <div
-      v-if="file"
-      class="file-info mb-8 ml-10"
-    >
-      <strong>File:</strong> {{ file }}
-    </div>
-    <v-textarea
-      v-model="formState.output"
-      class="mb-4"
-      :label="$t('ExperimentOutput')"
-      prepend-icon="mdi-code-brackets"
-      :rules="outputRules"
-      variant="outlined"
-    />
-    <v-textarea
-      v-model="formState.input"
-      :label="$t('ExperimentContext')"
-      prepend-icon="mdi-code-json"
-      :rules="inputRules"
-      variant="outlined"
-    />
+    <v-container class="ma-0 pa-0">
+      <v-row dense>
+        <v-col>
+          <v-text-field
+            v-model="formState.name"
+            class="form-field"
+            :label="$t('ExperimentName')"
+            prepend-icon="mdi-rename-outline"
+            required
+            :rules="nameRules"
+            variant="outlined"
+          />
+        </v-col>
+        <v-col>
+          <v-file-input
+            v-model="formState.file"
+            accept=".zcos"
+            chips
+            class="form-field"
+            :label="$t('ExperimentSchema')"
+            required
+            :rules="fileRules"
+            variant="outlined"
+          />
+          <div
+            v-if="file"
+            class="file-info ml-10"
+          >
+            <strong>File:</strong> {{ file }}
+          </div>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-textarea
+            v-model="formState.output"
+            class="form-field"
+            :label="$t('ExperimentOutput')"
+            prepend-icon="mdi-code-brackets"
+            :rules="outputRules"
+            variant="outlined"
+          />
+        </v-col>
+        <v-col>
+          <v-textarea
+            v-model="formState.input"
+            class="form-field"
+            :label="$t('ExperimentContext')"
+            prepend-icon="mdi-code-json"
+            :rules="inputRules"
+            variant="outlined"
+          />
+        </v-col>
+      </v-row>
+    </v-container>
   </v-form>
 </template>
 
@@ -151,8 +166,16 @@ const isJsonString = (jsonString) => {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .file-info {
     margin-top: -16px;
+}
+
+.form-field {
+    min-width: 300px;
+
+    @media (min-width: 600px) {
+        min-width: 430px;
+    }
 }
 </style>
