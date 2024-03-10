@@ -6,8 +6,11 @@
     >
       <v-btn
         v-if="data?.experiment?.created_by === currentLoggedUser.id"
+        :density="width < 960 ? 'comfortable' : 'default'"
         icon
+        :size="width < 600 ? 'small' : 'default'"
         :to="`/experiments/${data?.experiment?.id}/edit`"
+        variant="tonal"
       >
         <v-icon>mdi-pencil</v-icon>
       </v-btn>
@@ -15,11 +18,11 @@
     <v-card-text>
       <v-container>
         <div class="d-flex">
-          <div class="text-h4">
+          <div class="text-md-h4 text-sm-h5">
             {{ data?.experiment?.name }}
           </div>
           <v-spacer />
-          <div class="text-h5">
+          <div class="text-md-h5 text-sm-h6">
             <span class="font-weight-thin">{{ $t("By") }}:</span>
             <span>{{ data?.experiment?.created_by }}</span>
           </div>
@@ -52,7 +55,9 @@ import GraphComponent from "./components/GraphComponent.vue";
 import { useAuthStore } from "@/stores/Auth";
 import { storeToRefs } from "pinia";
 import SimulateForm from "./components/SimulateForm.vue";
+import { useWindowSize } from "@vueuse/core";
 
+const { width } = useWindowSize();
 const route = useRoute();
 const { id } = route.params;
 const graphData = ref([]);

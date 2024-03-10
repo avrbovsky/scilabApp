@@ -16,6 +16,7 @@
     <div class="d-flex justify-end">
       <v-btn
         :disabled="loading"
+        :size="width < 600 ? 'small' : 'default'"
         type="submit"
       >
         {{ $t("Simulate") }}
@@ -25,6 +26,7 @@
 </template>
 
 <script setup>
+import { useWindowSize } from "@vueuse/core";
 import { trans } from "laravel-vue-i18n";
 import { ref, watch } from "vue";
 
@@ -43,6 +45,7 @@ const props = defineProps({
     },
 });
 
+const { width } = useWindowSize();
 const form = ref(null);
 const experimentInput = ref("");
 

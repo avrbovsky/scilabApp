@@ -2,11 +2,22 @@
   <v-card class="h-100">
     <header-component :title="$t('ExperimentList')">
       <v-btn
+        v-if="width > 520"
         prepend-icon="mdi-plus-circle"
+        :size="width < 600 ? 'small' : 'default'"
         to="/experiments/add"
-        variant="elevated"
+        variant="tonal"
       >
         {{ $t("CreateExperiment") }}
+      </v-btn>
+      <v-btn
+        v-else
+        density="comfortable"
+        icon
+        size="small"
+        to="/experiments"
+      >
+        <v-icon>mdi-plus-circle</v-icon>
       </v-btn>
     </header-component>
     <v-card-text>
@@ -24,7 +35,7 @@
       >
         <!-- CODE IS INSPIRED FROM JAKUB MATISAK -->
         <template
-          v-if="windowWidth < 768"
+          v-if="width < 768"
           #headers="{ columns, isSorted, getSortIcon, toggleSort }"
         >
           <v-expansion-panels variant="accordion">
@@ -59,7 +70,7 @@
         </template>
 
         <template
-          v-if="windowWidth < 768"
+          v-if="width < 768"
           #body="{ internalItems, items, headers }"
         >
           <tr
@@ -101,14 +112,15 @@
 
 <script setup>
 import { trans } from "laravel-vue-i18n";
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useExperimentsListMutation } from "@/api/queries/experimentQueries";
 import { useUserListQuery } from "@/api/queries/userQueries";
 import HeaderComponent from "./components/HeaderComponent.vue";
 import { useDate } from "vuetify";
+import { useWindowSize } from "@vueuse/core";
 
-const windowWidth = ref(window.innerWidth);
+const { width } = useWindowSize();
 const date = useDate();
 const router = useRouter();
 const { isPending, mutateAsync } = useExperimentsListMutation();
@@ -128,18 +140,6 @@ const headers = computed(() => [
     { title: trans("CreatedBy"), key: "created_by", align: "start" },
     { title: trans("CreatedAt"), key: "created_at", align: "end" },
 ]);
-
-const handleResize = () => {
-    windowWidth.value = window.innerWidth;
-};
-
-onMounted(() => {
-    window.addEventListener("resize", handleResize);
-});
-
-onUnmounted(() => {
-    window.removeEventListener("resize", handleResize);
-});
 
 const experiments = ref([]);
 const totalItems = ref(0);

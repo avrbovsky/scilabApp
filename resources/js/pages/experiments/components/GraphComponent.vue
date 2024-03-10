@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span class="text-h4">{{ $t("ExperimentResult") }}:</span>
+    <span class="text-md-h4 text-sm-h5">{{ $t("ExperimentResult") }}:</span>
     <div class="experiment-graf">
       <apexchart
         :options="options"
@@ -15,7 +15,9 @@
         no-click-animation
         persistent
       >
-        <div class="graph-no-data pa-4 rounded-lg text-h2">
+        <div
+          class="graph-no-data pa-4 rounded-lg text-md-h2 text-sm-h5"
+        >
           {{ $t("GraphNoData") }}
         </div>
       </v-overlay>

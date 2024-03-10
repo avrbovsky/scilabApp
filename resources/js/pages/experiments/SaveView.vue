@@ -8,11 +8,13 @@
       :title="title"
     >
       <v-btn
+        :density="width < 960 ? 'comfortable' : 'default'"
         :disabled="isPending"
         icon
+        variant="tonal"
         @click="onSaveClicked"
       >
-        <v-icon>
+        <v-icon :size="width < 600 ? 'small' : 'default'">
           {{ isEditView ? "mdi-content-save" : "mdi-plus-circle" }}
         </v-icon>
       </v-btn>
@@ -50,7 +52,9 @@ import {
     useExperimentSaveMutation,
 } from "@/api/queries/experimentQueries";
 import { useNotificationStore } from "@/stores/NotificationService";
+import { useWindowSize } from "@vueuse/core";
 
+const { width } = useWindowSize();
 const route = useRoute();
 const isEditView = ref(route.path.includes("edit"));
 const title = computed(() =>
