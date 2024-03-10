@@ -90,7 +90,6 @@ const onSaveClicked = async () => {
     const { valid: isValid } = await createFormRef.value.form.validate();
     if (isValid) {
         try {
-            console.log(createFormRef);
             const { data } = await mutateAsync({
                 id: route.params.id,
                 name: createFormRef.value.formState.name,

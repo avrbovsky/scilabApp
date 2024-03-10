@@ -108,7 +108,7 @@ const fileRules = [
         !value ||
         !!value.length ||
         !!file.value ||
-        "Experiment schema is required",
+        trans("ExperimentSchemaError"),
 ];
 const outputRules = [
     (value) => isArrayString(value) || trans("ExperimentOutputArrayError"),
