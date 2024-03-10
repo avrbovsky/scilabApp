@@ -30,12 +30,14 @@ import { trans } from "laravel-vue-i18n";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useExperimentsListMutation } from "@/api/queries/experimentQueries";
+import { useUserListQuery } from "@/api/queries/userQueries";
 import HeaderComponent from "./components/HeaderComponent.vue";
 import { useDate } from "vuetify";
 
 const date = useDate();
 const router = useRouter();
 const { isPending, mutateAsync } = useExperimentsListMutation();
+const { data } = useUserListQuery();
 const itemsPerPage = ref(10);
 const headers = [
     {
@@ -62,8 +64,15 @@ const experimentsMapped = computed(() => {
             new Date(experiment.created_at),
             "keyboardDate"
         ),
+        created_by: getCreatedBy(experiment.created_by),
     }));
 });
+
+const getCreatedBy = (id) => {
+    const user = data?.value?.data?.users?.find((u) => u.id === id);
+
+    return user ? user.name : id;
+};
 
 const loadItems = ({ page, itemsPerPage, sortBy }) => {
     mutateAsync({ page, itemsPerPage, sortBy: sortBy && sortBy[0] }).then(
