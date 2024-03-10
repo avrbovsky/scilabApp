@@ -46,8 +46,10 @@ const props = defineProps({
 const form = ref(null);
 const experimentInput = ref("");
 
-watch(props, () => {
-    experimentInput.value = props.context;
+watch(props, (newVal, oldVal) => {
+    if (newVal.context !== oldVal.context || !experimentInput.value) {
+        experimentInput.value = props.context;
+    }
 });
 
 const inputRules = [
