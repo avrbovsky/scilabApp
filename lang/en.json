@@ -35,5 +35,8 @@
     "ExperimentCreateSuccess": "Experiment created successfully",
     "ExperimentCreateError": "There was an error when creating experiment",
     "ExperimentEditSuccess": "Experiment edited successfully",
-    "ExperimentEditError": "There was an error when editing experiment"
+    "ExperimentEditError": "There was an error when editing experiment",
+    "ExperimentIndividualItems": "Individual Items",
+    "ExperimentObjects": "Objects",
+    "ExperimentOutputs": "Outputs"
 }

@@ -35,10 +35,10 @@
       </v-row>
       <v-tabs v-model="tab">
         <v-tab value="individual">
-          Individual Items
+          {{ $t("ExperimentIndividualItems") }}
         </v-tab>
         <v-tab value="object">
-          Object Setting
+          {{ $t("ExperimentObjects") }}
         </v-tab>
       </v-tabs>
       <v-window v-model="tab">
@@ -50,7 +50,7 @@
                 justify="space-between"
               >
                 <div class="text-h6">
-                  Outputs:
+                  {{ $t("ExperimentOutputs") }}:
                 </div>
                 <v-btn
                   class="icon-btn"

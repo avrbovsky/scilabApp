@@ -35,5 +35,8 @@
     "ExperimentCreateSuccess": "Experiment bol úspešne vytvorený",
     "ExperimentCreateError": "Nastala chyba pri vytváraní experimentu",
     "ExperimentEditSuccess": "Experiment bol úspešne upravený",
-    "ExperimentEditError": "Nastala chyba pri upravovaní experimentu"
+    "ExperimentEditError": "Nastala chyba pri upravovaní experimentu",
+    "ExperimentIndividualItems": "Samostatné položky",
+    "ExperimentObjects": "Objekty",
+    "ExperimentOutputs": "Výstupy"
 }
