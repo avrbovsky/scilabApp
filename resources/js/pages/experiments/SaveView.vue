@@ -12,7 +12,9 @@
         icon
         @click="onSaveClicked"
       >
-        <v-icon>mdi-content-save</v-icon>
+        <v-icon>
+          {{ isEditView ? "mdi-content-save" : "mdi-plus-circle" }}
+        </v-icon>
       </v-btn>
     </header-component>
     <template #loader="{ isActive }">
