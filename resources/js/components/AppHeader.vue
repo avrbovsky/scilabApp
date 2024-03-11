@@ -18,7 +18,6 @@
 </template>
 
 <script setup>
-import { defineEmits } from "vue";
 import LanguageMenu from "./LanguageMenu.vue";
 
 const emit = defineEmits(["toggle"]);
