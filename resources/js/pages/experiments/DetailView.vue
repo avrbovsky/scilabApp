@@ -24,7 +24,9 @@
           <v-spacer />
           <div class="text-md-h5 text-sm-h6">
             <span class="font-weight-thin">{{ $t("By") }}:</span>
-            <span>{{ data?.experiment?.created_by }}</span>
+            <span>{{
+              user?.user?.name || data?.experiment?.created_by
+            }}</span>
           </div>
         </div>
         <v-divider />
@@ -56,6 +58,7 @@ import { useAuthStore } from "@/stores/Auth";
 import { storeToRefs } from "pinia";
 import SimulateForm from "./components/SimulateForm.vue";
 import { useWindowSize } from "@vueuse/core";
+import { useUserDetailMutation } from "@/api/queries/userQueries";
 
 const { width } = useWindowSize();
 const route = useRoute();
@@ -66,20 +69,27 @@ const authStore = useAuthStore();
 const { currentLoggedUser } = storeToRefs(authStore);
 
 const { data, mutateAsync } = useExperimentDetailMutation();
+const { data: user, mutateAsync: loadUser } = useUserDetailMutation();
 const { mutateAsync: simulate, isPending: isPendingSimulation } =
     useExperimentSimulateMutation();
 
 const { showSnackbar } = useNotificationStore();
 
 onMounted(async () => {
-    mutateAsync(id);
+    loadExperiment(id);
 });
 
 watch(route, () => {
     if (route.params.id) {
-        mutateAsync(route.params.id);
+        loadExperiment(route.params.id);
     }
 });
+
+const loadExperiment = (experimentId) => {
+    mutateAsync(experimentId)
+        .then(({ experiment }) => loadUser(experiment.created_by))
+        .catch((err) => console.error(err.message));
+};
 
 const handleSubmit = async (context) => {
     try {
