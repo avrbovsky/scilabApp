@@ -162,12 +162,16 @@ watch(props, () => {
 });
 
 const onOutputChange = (_) => {
-    const values = formState.output
-        .replace("[", "")
-        .replace("]", "")
-        .replaceAll('"', "")
-        .split(",");
-    formState.outputItems = values.map((value) => value.trim());
+    if (formState.output) {
+        const values = formState.output
+            .replace("[", "")
+            .replace("]", "")
+            .replaceAll('"', "")
+            .split(",");
+        formState.outputItems = values.map((value) => value.trim());
+    } else {
+        formState.outputItems = [""];
+    }
 };
 
 const onOutputItemsChange = (_) => {
