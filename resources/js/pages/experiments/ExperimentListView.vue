@@ -83,7 +83,8 @@
             v-for="(item, i) in internalItems"
             v-else
             :key="i"
-            @click.stop="onActiveItem(item.raw.original)"
+            class="cursor-pointer"
+            @click.stop="onRowClick(i, { item })"
           >
             <td>
               <ul class="mobile-grid-content">
