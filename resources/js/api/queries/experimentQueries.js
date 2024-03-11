@@ -33,7 +33,7 @@ const experimentSave = async (experimentData) => {
 
     formData.append("context", experimentData.context);
     formData.append("output", experimentData.output);
-    formData.append("save", false);
+    formData.append("save", experimentData.save);
 
     try {
         const data = await api.post(url, formData, {
