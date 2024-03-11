@@ -4,6 +4,16 @@
     :disabled="loading"
   >
     <v-container class="ma-0 pa-0">
+      <v-row
+        v-if="!experiment"
+        class="px-2"
+      >
+        <v-switch
+          v-model="formState.save"
+          inset
+          :label="$t('SaveExperiment')"
+        />
+      </v-row>
       <v-row dense>
         <v-col class="form-item">
           <v-text-field
@@ -132,6 +142,7 @@ const props = defineProps({
 
 const form = ref(null);
 const formState = reactive({
+    save: false,
     name: "",
     file: undefined,
     output: "[]",
@@ -188,7 +199,9 @@ defineExpose({
     file,
 });
 
-const nameRules = [(value) => !!value || trans("ExperimentNameError")];
+const nameRules = [
+    (value) => !formState.save || !!value || trans("ExperimentNameError"),
+];
 const fileRules = [
     (value) =>
         !value ||

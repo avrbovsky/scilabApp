@@ -102,6 +102,7 @@ const onSaveClicked = async () => {
                     : undefined,
                 context: createFormRef.value.formState.input,
                 output: createFormRef.value.formState.output,
+                save: createFormRef.value.formState.save,
             });
 
             const snackbarMessage = isEditView.value

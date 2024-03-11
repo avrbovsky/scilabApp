@@ -180,14 +180,21 @@ class ExperimentController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'file' => 'required|file',
-            'name' => 'required|string',
+            'name' => 'string',
             'context' => 'required|json',
             'output' => 'required|json',
-            'save' => 'boolean',
+            'save' => 'string',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        $saveString = $request->input('save', false);
+        $save = filter_var($saveString, FILTER_VALIDATE_BOOLEAN);
+
+        if ($save && !$request->has('name')) {
+            return response()->json(['error_message' => "Name is required when saving the experiment."], 400);
         }
 
         $file = $request->file('file');
@@ -195,14 +202,16 @@ class ExperimentController extends Controller
         $fileName = time().'_'.$originalFileName;
         $filePath = $file->storeAs('experiment_files', $fileName);
 
-        $experiment = Experiment::create([
-            'file_name' => $originalFileName,
-            'file_path' => $filePath,
-            'name' => $request->input('name'),
-            'context' => $request->input('context'),
-            'output' => $request->input('output'),
-            'created_by' => auth()->id(),
-        ]);
+        if($save){
+            $experiment = Experiment::create([
+                'file_name' => $originalFileName,
+                'file_path' => $filePath,
+                'name' => $request->input('name'),
+                'context' => $request->input('context'),
+                'output' => $request->input('output'),
+                'created_by' => auth()->id(),
+            ]);
+        }
 
         $output_values = json_decode($request->input('output'));
         $input_values = json_decode($request->input('context'));
@@ -215,6 +224,10 @@ class ExperimentController extends Controller
         $script = "SCRIPT=\"loadXcosLibs();loadScicos();importXcosDiagram('/var/www/html/scilabApp/storage/app/" . $filePath . "');Context=struct();" . $context . "scicos_simulate(scs_m,list(),Context,'nw');\" /var/www/html/scilabApp/docker/run-script.sh";
         
         $result = shell_exec($script);
+
+        if(!$save){
+            Storage::delete($filePath);
+        }
 
         $result = explode("\n\n", $result);
         array_shift($result);

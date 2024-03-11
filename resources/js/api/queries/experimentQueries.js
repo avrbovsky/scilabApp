@@ -26,9 +26,14 @@ const experimentSave = async (experimentData) => {
     if (experimentData.file) {
         formData.append("file", experimentData.file);
     }
-    formData.append("name", experimentData.name);
+
+    if (experimentData.name) {
+        formData.append("name", experimentData.name);
+    }
+
     formData.append("context", experimentData.context);
     formData.append("output", experimentData.output);
+    formData.append("save", false);
 
     try {
         const data = await api.post(url, formData, {
