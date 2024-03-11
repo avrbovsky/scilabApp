@@ -31,6 +31,7 @@
     "GraphNoData": "No data for graph",
     "ExperimentSimulationSuccess": "Experiment simulated successfully",
     "ExperimentSimulationError": "There was an error when simulating Experiment",
+    "ExperimentRemoveSuccess": "Experiment was removed successfully",
     "CreatedBy": "Created By",
     "CreatedAt": "Created At",
     "ExperimentCreateSuccess": "Experiment created successfully",

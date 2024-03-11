@@ -31,6 +31,7 @@
     "GraphNoData": "Žiadne dáta do grafu",
     "ExperimentSimulationSuccess": "Experiment bol odsimulovaný úspešne",
     "ExperimentSimulationError": "Nastala chyba pri simulovaní experimentu",
+    "ExperimentRemoveSuccess": "Experiment bol úspešne odstránený",
     "CreatedBy": "Vytvoril",
     "CreatedAt": "Vytvorené",
     "ExperimentCreateSuccess": "Experiment bol úspešne vytvorený",

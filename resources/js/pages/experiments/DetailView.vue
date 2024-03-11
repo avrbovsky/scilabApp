@@ -6,6 +6,7 @@
     >
       <v-btn
         v-if="data?.experiment?.created_by === currentLoggedUser.id"
+        class="mr-2"
         :density="width < 960 ? 'comfortable' : 'default'"
         icon
         :size="width < 600 ? 'small' : 'default'"
@@ -14,6 +15,28 @@
       >
         <v-icon>mdi-pencil</v-icon>
       </v-btn>
+      <v-menu
+        v-if="data?.experiment?.created_by === currentLoggedUser.id"
+      >
+        <template #activator="{ props }">
+          <v-btn
+            v-bind="props"
+            :density="width < 960 ? 'comfortable' : 'default'"
+            icon="mdi-dots-vertical"
+            :size="width < 600 ? 'small' : 'default'"
+            variant="tonal"
+          />
+        </template>
+        <v-list>
+          <v-list-item
+            append-icon="mdi-delete"
+            base-color="red"
+            title="Remove"
+            value="remove"
+            @click.stop="onRemoveClicked"
+          />
+        </v-list>
+      </v-menu>
     </header-component>
     <v-card-text>
       <v-container>
@@ -45,12 +68,14 @@
 
 <script setup>
 import { trans } from "laravel-vue-i18n";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { onMounted, watch, ref } from "vue";
 import {
+    useExperimentDestroyMutation,
     useExperimentDetailMutation,
     useExperimentSimulateMutation,
 } from "@/api/queries/experimentQueries";
+import { useUserDetailMutation } from "@/api/queries/userQueries";
 import { useNotificationStore } from "@/stores/NotificationService";
 import HeaderComponent from "./components/HeaderComponent.vue";
 import GraphComponent from "./components/GraphComponent.vue";
@@ -58,10 +83,10 @@ import { useAuthStore } from "@/stores/Auth";
 import { storeToRefs } from "pinia";
 import SimulateForm from "./components/SimulateForm.vue";
 import { useWindowSize } from "@vueuse/core";
-import { useUserDetailMutation } from "@/api/queries/userQueries";
 
 const { width } = useWindowSize();
 const route = useRoute();
+const router = useRouter();
 const { id } = route.params;
 const graphData = ref([]);
 
@@ -72,6 +97,7 @@ const { data, mutateAsync } = useExperimentDetailMutation();
 const { data: user, mutateAsync: loadUser } = useUserDetailMutation();
 const { mutateAsync: simulate, isPending: isPendingSimulation } =
     useExperimentSimulateMutation();
+const { mutateAsync: removeExperiment } = useExperimentDestroyMutation();
 
 const { showSnackbar } = useNotificationStore();
 
@@ -104,15 +130,23 @@ const handleSubmit = async (context) => {
         showSnackbar(trans("ExperimentSimulationError"), "error");
     }
 };
+
+const onRemoveClicked = async () => {
+    await removeExperiment(route.params.id);
+
+    showSnackbar(trans("ExperimentRemoveSuccess", "success"));
+    router.push("/experiments");
+};
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .v-card {
     display: flex !important;
     flex-direction: column;
-}
-.v-card-text {
-    overflow: scroll;
-    padding: 16;
+
+    .v-card-text {
+        overflow: scroll;
+        padding: 16;
+    }
 }
 </style>
