@@ -18,7 +18,15 @@
         <div
           class="graph-no-data pa-4 rounded-lg text-md-h2 text-sm-h5"
         >
-          {{ $t("GraphNoData") }}
+          <v-progress-circular
+            v-if="loading"
+            color="primary"
+            indeterminate
+            :size="45"
+          />
+          <span v-else>
+            {{ $t("GraphNoData") }}
+          </span>
         </div>
       </v-overlay>
     </div>
@@ -33,9 +41,13 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    loading: {
+        type: Boolean,
+        required: true,
+    },
 });
 
-const showOverlay = computed(() => props.data.length === 0);
+const showOverlay = computed(() => props.data.length === 0 || props.loading);
 
 const dataSeries = computed(() => {
     if (!props.data.length) {
@@ -87,6 +99,13 @@ const options = computed(() => ({
     },
     stroke: {
         width: 2,
+    },
+    yaxis: {
+        labels: {
+            formatter: function (value) {
+                return value.toFixed(3);
+            },
+        },
     },
 }));
 </script>

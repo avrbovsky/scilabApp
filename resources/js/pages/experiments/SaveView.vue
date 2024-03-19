@@ -34,7 +34,10 @@
         :loading="isPending"
       />
       <v-container>
-        <graph-component :data="graphData" />
+        <graph-component
+          :data="graphData"
+          :loading="isPending"
+        />
       </v-container>
     </v-card-text>
   </v-card>

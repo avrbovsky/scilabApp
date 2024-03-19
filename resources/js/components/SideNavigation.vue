@@ -20,6 +20,7 @@
     <div class="px-2">
       <v-switch
         v-model="currentTheme"
+        color="primary"
         false-value="lightTheme"
         hide-details
         inset

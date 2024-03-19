@@ -1,5 +1,8 @@
 <template>
-  <v-card class="h-100">
+  <v-card
+    class="h-100"
+    :loading="isPendingExperiment || isPendingSimulation"
+  >
     <header-component
       :back-button="true"
       :title="$t('ExperimentDetailTitle')"
@@ -38,6 +41,14 @@
         </v-list>
       </v-menu>
     </header-component>
+    <template #loader="{ isActive }">
+      <v-progress-linear
+        :active="isActive"
+        color="blue-grey-lighten-3"
+        height="4"
+        indeterminate
+      />
+    </template>
     <v-card-text>
       <v-container>
         <div class="d-flex">
@@ -59,7 +70,10 @@
           :submit="handleSubmit"
         />
         <v-container>
-          <graph-component :data="graphData" />
+          <graph-component
+            :data="graphData"
+            :loading="isPendingSimulation"
+          />
         </v-container>
       </v-container>
     </v-card-text>
@@ -93,7 +107,11 @@ const graphData = ref([]);
 const authStore = useAuthStore();
 const { currentLoggedUser } = storeToRefs(authStore);
 
-const { data, mutateAsync } = useExperimentDetailMutation();
+const {
+    data,
+    mutateAsync,
+    isPending: isPendingExperiment,
+} = useExperimentDetailMutation();
 const { data: user, mutateAsync: loadUser } = useUserDetailMutation();
 const { mutateAsync: simulate, isPending: isPendingSimulation } =
     useExperimentSimulateMutation();

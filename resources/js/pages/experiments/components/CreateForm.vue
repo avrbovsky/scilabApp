@@ -10,6 +10,7 @@
       >
         <v-switch
           v-model="formState.save"
+          color="primary"
           inset
           :label="$t('SaveExperiment')"
         />
