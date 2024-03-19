@@ -59,6 +59,7 @@ RUN chown -R www-data:www-data /var/www/html
 
 RUN npm install
 
-RUN chmod +x ./docker/entrypoint-install.sh
+RUN chmod +x ./docker/entrypoint-install.sh ./docker/wait-for-it.sh
 ENV PORT=8000
-ENTRYPOINT [ "docker/entrypoint-install.sh" ]
+ENTRYPOINT [ "/bin/bash", "-c" ]
+CMD [ "docker/wait-for-it.sh $DB_HOST:$DB_PORT --strict --quiet -- docker/entrypoint-install.sh" ]
