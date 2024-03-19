@@ -84,7 +84,7 @@
             v-else
             :key="i"
             class="cursor-pointer"
-            @click.stop="onRowClick(i, { item })"
+            @click.stop="onRowClick(i, { item: item.raw })"
           >
             <td>
               <ul class="mobile-grid-content">
