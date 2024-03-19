@@ -159,6 +159,7 @@ watch(props, () => {
         formState.output = output;
         formState.name = name;
         file.value = file_name;
+        onOutputChange();
     }
 });
 
