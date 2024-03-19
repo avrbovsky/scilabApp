@@ -6,6 +6,7 @@ use App\Models\Experiment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Services\ExperimentService;
 
 /**
  * @OA\Tag(
@@ -216,45 +217,12 @@ class ExperimentController extends Controller
         $output_values = json_decode($request->input('output'));
         $input_values = json_decode($request->input('context'));
 
-        $context = "";
-        foreach ($input_values as $key => $value) {
-            $context .= "Context.{$key}={$value};";
-        }
-        
-        $script = "SCRIPT=\"loadXcosLibs();loadScicos();importXcosDiagram('/var/www/html/scilabApp/storage/app/" . $filePath . "');Context=struct();" . $context . "scicos_simulate(scs_m,list(),Context,'nw');\" /var/www/html/scilabApp/docker/run-script.sh";
-        
-        $result = shell_exec($script);
+        $result_array = ExperimentService::simulateExperiment($input_values, $output_values, $filePath);
 
         if(!$save){
             Storage::delete($filePath);
         }
 
-        $result = explode("\n\n", $result);
-        array_shift($result);
-
-        $result_array = [];
-        foreach ($result as $string) {
-            $string = trim($string);
-            $values = array_map(function($item) {
-                return floatval(trim($item));
-            }, explode("\n", $string));
-
-            $values_count = count($values);
-            $output_count = count($output_values);
-
-            if($values_count <= $output_count){
-                $obj = [];
-                for($i = 0; $i < $values_count; $i++){
-                    $obj[$output_values[$i]] = $values[$i];
-                }
-
-                array_push($result_array, $obj);
-            } else {
-                array_push($result_array, $values);
-            }
-        }
-
-        // $result_array = shell_exec("NAME='ADO' /var/www/html/scilabApp/docker/test-script.sh");
         return response()->json(["simulation"=>$result_array], 201);
     }
 
@@ -410,39 +378,7 @@ class ExperimentController extends Controller
             $output_values = json_decode($output);
             $input_values = json_decode($context);
 
-            $context = "";
-            foreach ($input_values as $key => $value) {
-                $context .= "Context.{$key}={$value};";
-            }
-            
-            $script = "SCRIPT=\"loadXcosLibs();loadScicos();importXcosDiagram('/var/www/html/scilabApp/storage/app/" . $filePath . "');Context=struct();" . $context . "scicos_simulate(scs_m,list(),Context,'nw');\" /var/www/html/scilabApp/docker/run-script.sh";
-
-            $result = shell_exec($script);
-
-            $result = explode("\n\n", $result);
-            array_shift($result);
-
-            $result_array = [];
-            foreach ($result as $string) {
-                $string = trim($string);
-                $values = array_map(function($item) {
-                    return floatval(trim($item));
-                }, explode("\n", $string));
-
-                $values_count = count($values);
-                $output_count = count($output_values);
-
-                if($values_count <= $output_count){
-                    $obj = [];
-                    for($i = 0; $i < $values_count; $i++){
-                        $obj[$output_values[$i]] = $values[$i];
-                    }
-
-                    array_push($result_array, $obj);
-                } else {
-                    array_push($result_array, $values);
-                }
-            }
+            $result_array = ExperimentService::simulateExperiment($input_values, $output_values, $filePath);
 
             return response()->json(["simulation"=>$result_array], 201);
 
@@ -560,41 +496,9 @@ class ExperimentController extends Controller
 
             $output_values = json_decode($experiment->output);
             $input_values = json_decode($request->input('context'));
-
-            $context = "";
-            foreach ($input_values as $key => $value) {
-                $context .= "Context.{$key}={$value};";
-            }
             $filePath = $experiment->file_path;
 
-            $script = "SCRIPT=\"loadXcosLibs();loadScicos();importXcosDiagram('/var/www/html/scilabApp/storage/app/" . $filePath . "');Context=struct();" . $context . "scicos_simulate(scs_m,list(),Context,'nw');\" /var/www/html/scilabApp/docker/run-script.sh";
-
-            $result = shell_exec($script);
-            
-            $result = explode("\n\n", $result);
-            array_shift($result);
-
-            $result_array = [];
-            foreach ($result as $string) {
-                $string = trim($string);
-                $values = array_map(function($item) {
-                    return floatval(trim($item));
-                }, explode("\n", $string));
-
-                $values_count = count($values);
-                $output_count = count($output_values);
-
-                if($values_count <= $output_count){
-                    $obj = [];
-                    for($i = 0; $i < $values_count; $i++){
-                        $obj[$output_values[$i]] = $values[$i];
-                    }
-
-                    array_push($result_array, $obj);
-                } else {
-                    array_push($result_array, $values);
-                }
-            }
+            $result_array = ExperimentService::simulateExperiment($input_values, $output_values, $filePath);
 
             return response()->json(["simulation"=>$result_array], 201);
         } catch(\Exception $_){
