@@ -61,6 +61,7 @@
             <v-col class="form-item">
               <v-row
                 align="center"
+                class="pl-10"
                 justify="space-between"
               >
                 <div class="text-h6">
@@ -79,6 +80,7 @@
                 v-for="(_, idx) in formState.outputItems"
                 :key="idx"
                 v-model="formState.outputItems[idx]"
+                class="ml-10"
                 required
                 :rules="individualInputRules"
                 variant="outlined"
