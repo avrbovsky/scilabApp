@@ -3,7 +3,10 @@
     ref="form"
     :disabled="loading"
   >
-    <v-container class="ma-0 pa-0">
+    <v-container
+      class="ma-0 pa-0"
+      fluid
+    >
       <v-row
         v-if="!experiment"
         class="px-2"
