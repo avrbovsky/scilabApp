@@ -34,7 +34,7 @@
           <v-list-item
             append-icon="mdi-delete"
             base-color="red"
-            title="Remove"
+            :title="$t('Remove')"
             value="remove"
             @click.stop="onRemoveClicked"
           />
