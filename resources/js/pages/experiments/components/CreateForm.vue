@@ -82,14 +82,14 @@
                 v-model="formState.outputItems[idx]"
                 class="ml-10"
                 required
-                :rules="individualInputRules"
+                :rules="individualOutputRules"
                 variant="outlined"
                 @update:model-value="onOutputItemsChange"
               >
                 <template #append>
                   <v-icon
                     class="icon"
-                    color="red"
+                    color="error"
                     @click="removeOutputItem(idx)"
                   >
                     mdi-minus-circle
@@ -97,7 +97,62 @@
                 </template>
               </v-text-field>
             </v-col>
-            <v-col class="form-item" />
+            <v-col class="form-item">
+              <v-row
+                align="center"
+                class="pl-8"
+                justify="space-between"
+              >
+                <div class="text-h6">
+                  {{ $t("ExperimentInputs") }}:
+                </div>
+                <v-btn
+                  class="icon-btn"
+                  color="success"
+                  density="compact"
+                  icon="mdi-plus-circle"
+                  variant="text"
+                  @click="addInputItem"
+                />
+              </v-row>
+              <v-row
+                v-for="(_, idx) in formState.inputItems"
+                :key="idx"
+                align="center"
+                class="pl-8"
+                justify="center"
+              >
+                <v-col class="pa-0">
+                  <v-text-field
+                    v-model="formState.inputItems[idx].key"
+                    :label="$t('Key')"
+                    required
+                    :rules="individualInputKeyRules"
+                    variant="outlined"
+                    @update:model-value="onInputItemsChange"
+                  />
+                </v-col>
+                <v-col class="ml-5 pa-0">
+                  <v-text-field
+                    v-model="
+                      formState.inputItems[idx].value
+                    "
+                    :label="$t('Value')"
+                    required
+                    variant="outlined"
+                    @update:model-value="onInputItemsChange"
+                  />
+                </v-col>
+                <v-btn
+                  class="icon-btn mb-6 ml-5 mt-1"
+                  color="error"
+                  density="compact"
+                  icon="mdi-minus-circle"
+                  variant="text"
+                  @click="removeInputItem(idx)"
+                />
+              </v-row>
+            </v-col>
           </v-row>
         </v-window-item>
 
@@ -120,6 +175,7 @@
                 prepend-icon="mdi-code-json"
                 :rules="inputRules"
                 variant="outlined"
+                @update:model-value="onInputChange"
               />
             </v-col>
           </v-row>
@@ -154,6 +210,7 @@ const formState = reactive({
     output: "[]",
     input: "{}",
     outputItems: [""],
+    inputItems: [{ key: "", value: "" }],
 });
 const file = ref("");
 
@@ -169,15 +226,35 @@ watch(props, () => {
 });
 
 const onOutputChange = (_) => {
-    if (formState.output) {
-        const values = formState.output
-            .replace("[", "")
-            .replace("]", "")
-            .replaceAll('"', "")
-            .split(",");
-        formState.outputItems = values.map((value) => value.trim());
-    } else {
+    try {
+        const outputArray = JSON.parse(formState.output);
+
+        if (
+            outputArray &&
+            typeof outputArray === "object" &&
+            Array.isArray(outputArray)
+        ) {
+            formState.outputItems = outputArray;
+        }
+    } catch (e) {
         formState.outputItems = [""];
+    }
+};
+
+const onInputChange = (_) => {
+    try {
+        const inputObject = JSON.parse(formState.input);
+        const keys = Object.keys(inputObject);
+        const values = Object.values(inputObject);
+
+        const inputItems = [];
+        for (let i = 0; i < keys.length; i++) {
+            inputItems.push({ key: keys[i], value: values[i] });
+        }
+
+        formState.inputItems = inputItems;
+    } catch (e) {
+        formState.inputItems = [{ key: "", value: "" }];
     }
 };
 
@@ -187,21 +264,49 @@ const onOutputItemsChange = (_) => {
         if (i !== 0) {
             output += ", ";
         }
-        output += `"${formState.outputItems[i]}"`;
+        output += `"${escapeQuotes(formState.outputItems[i])}"`;
     }
     output += "]";
     formState.output = output;
 };
 
+const onInputItemsChange = (_) => {
+    let input = "{";
+    for (let i = 0; i < formState.inputItems.length; i++) {
+        if (i !== 0) {
+            input += ", ";
+        }
+        input += `"${escapeQuotes(
+            formState.inputItems[i].key
+        )}": "${escapeQuotes(formState.inputItems[i].value)}"`;
+    }
+    input += "}";
+    formState.input = input;
+};
+
+const escapeQuotes = (string) => {
+  if(typeof string === "string"){
+    return string.replaceAll('"', '\\"');
+  }
+
+  return string;
+};
+
 const removeOutputItem = (idx) => {
-    const items = [...formState.outputItems];
-    items.splice(idx, 1);
-    formState.outputItems = items;
+    formState.outputItems.splice(idx, 1);
     onOutputItemsChange();
 };
 
 const addOutputItem = () => {
-    formState.outputItems = [...formState.outputItems, ""];
+    formState.outputItems.push("");
+};
+
+const addInputItem = () => {
+    formState.inputItems.push({ key: "", value: "" });
+};
+
+const removeInputItem = (idx) => {
+    formState.inputItems.splice(idx, 1);
 };
 
 defineExpose({
@@ -230,10 +335,16 @@ const inputRules = [
     (value) => isJsonString(value) || trans("ExperimentContextError"),
 ];
 
-const individualInputRules = [
+const individualOutputRules = [
     (value) =>
         formState.outputItems.filter((v) => v === value).length === 1 ||
         trans("ExperimentOutputUniqueStringError"),
+];
+
+const individualInputKeyRules = [
+    (value) =>
+        formState.inputItems.filter((v) => v.key === value).length === 1 ||
+        trans("ExperimentInputUniqueKeyError"),
 ];
 
 const onlyUnique = (value, index, array) => {
