@@ -187,8 +187,13 @@
 
 <script setup>
 import { trans } from "laravel-vue-i18n";
-import { reactive, watch } from "vue";
-import { ref } from "vue";
+import { ref, reactive, watch } from "vue";
+import {
+    containsUnique,
+    onlyStrings,
+    isArrayString,
+    isJsonString,
+} from "@/utils/formRules";
 
 const tab = ref(null);
 const props = defineProps({
@@ -285,11 +290,11 @@ const onInputItemsChange = (_) => {
 };
 
 const escapeQuotes = (string) => {
-  if(typeof string === "string"){
-    return string.replaceAll('"', '\\"');
-  }
+    if (typeof string === "string") {
+        return string.replaceAll('"', '\\"');
+    }
 
-  return string;
+    return string;
 };
 
 const removeOutputItem = (idx) => {
@@ -346,51 +351,6 @@ const individualInputKeyRules = [
         formState.inputItems.filter((v) => v.key === value).length === 1 ||
         trans("ExperimentInputUniqueKeyError"),
 ];
-
-const onlyUnique = (value, index, array) => {
-    return array.indexOf(value) === index;
-};
-
-const containsUnique = (arrayString) => {
-    const array = JSON.parse(arrayString);
-    const uniqueArray = array.filter(onlyUnique);
-    return uniqueArray.length === array.length;
-};
-
-const onlyStrings = (arrayString) => {
-    const array = JSON.parse(arrayString);
-    const notString = array.find((item) => typeof item !== "string");
-
-    return !notString;
-};
-
-const isArrayString = (arrayString) => {
-    try {
-        const o = JSON.parse(arrayString);
-
-        if (o && typeof o === "object" && Array.isArray(o)) {
-            return true;
-        }
-    } catch (e) {
-        /* empty */
-    }
-
-    return false;
-};
-
-const isJsonString = (jsonString) => {
-    try {
-        const o = JSON.parse(jsonString);
-
-        if (o && typeof o === "object") {
-            return true;
-        }
-    } catch (e) {
-        /* empty */
-    }
-
-    return false;
-};
 </script>
 
 <style lang="scss" scoped>
