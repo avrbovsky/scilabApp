@@ -2,10 +2,17 @@ const onlyUnique = (value, index, array) => {
     return array.indexOf(value) === index;
 };
 
-export const containsUnique = (arrayString) => {
+export const arrayContainsUniqueItems = (arrayString) => {
     const array = JSON.parse(arrayString);
     const uniqueArray = array.filter(onlyUnique);
     return uniqueArray.length === array.length;
+};
+
+export const objectContainsUniqueKeys = (objectString) => {
+    const object = JSON.parse(objectString);
+    const keys = Object.keys(object);
+    const uniqueKeys = keys.filter(onlyUnique);
+    return uniqueKeys.length === keys.length;
 };
 
 export const onlyStrings = (arrayString) => {

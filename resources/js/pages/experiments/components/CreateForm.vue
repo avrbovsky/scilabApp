@@ -189,10 +189,11 @@
 import { trans } from "laravel-vue-i18n";
 import { ref, reactive, watch } from "vue";
 import {
-    containsUnique,
+    arrayContainsUniqueItems,
     onlyStrings,
     isArrayString,
     isJsonString,
+    objectContainsUniqueKeys,
 } from "@/utils/formRules";
 
 const tab = ref(null);
@@ -334,10 +335,14 @@ const outputRules = [
     (value) => isArrayString(value) || trans("ExperimentOutputArrayError"),
     (value) => onlyStrings(value) || trans("ExperimentOutputStringsError"),
     (value) =>
-        containsUnique(value) || trans("ExperimentOutputUniqueStringError"),
+        arrayContainsUniqueItems(value) ||
+        trans("ExperimentOutputUniqueStringError"),
 ];
 const inputRules = [
     (value) => isJsonString(value) || trans("ExperimentContextError"),
+    (value) =>
+        objectContainsUniqueKeys(value) ||
+        trans("ExperimentInputUniqueKeyError"),
 ];
 
 const individualOutputRules = [
