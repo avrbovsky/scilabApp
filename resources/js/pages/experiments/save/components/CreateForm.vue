@@ -136,7 +136,7 @@ const formState = reactive({
 const file = ref("");
 
 watch(props, () => {
-    if (props.experiment) {
+    if (props.experiment && props.loading === false) {
         const { context, name, output, file_name } = props.experiment;
         formState.input = context;
         formState.output = output;
