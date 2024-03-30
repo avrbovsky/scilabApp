@@ -58,101 +58,14 @@
       <v-window v-model="tab">
         <v-window-item value="individual">
           <v-row class="mt-2">
-            <v-col class="form-item">
-              <v-row
-                align="center"
-                class="pl-10"
-                justify="space-between"
-              >
-                <div class="text-h6">
-                  {{ $t("ExperimentOutputs") }}:
-                </div>
-                <v-btn
-                  class="icon-btn"
-                  color="success"
-                  density="compact"
-                  icon="mdi-plus-circle"
-                  variant="text"
-                  @click="addOutputItem"
-                />
-              </v-row>
-              <v-text-field
-                v-for="(_, idx) in formState.outputItems"
-                :key="idx"
-                v-model="formState.outputItems[idx]"
-                class="ml-10"
-                required
-                :rules="individualOutputRules"
-                variant="outlined"
-                @update:model-value="onOutputItemsChange"
-              >
-                <template #append>
-                  <v-icon
-                    class="icon"
-                    color="error"
-                    @click="removeOutputItem(idx)"
-                  >
-                    mdi-minus-circle
-                  </v-icon>
-                </template>
-              </v-text-field>
-            </v-col>
-            <v-col class="form-item">
-              <v-row
-                align="center"
-                class="pl-8"
-                justify="space-between"
-              >
-                <div class="text-h6">
-                  {{ $t("ExperimentInputs") }}:
-                </div>
-                <v-btn
-                  class="icon-btn"
-                  color="success"
-                  density="compact"
-                  icon="mdi-plus-circle"
-                  variant="text"
-                  @click="addInputItem"
-                />
-              </v-row>
-              <v-row
-                v-for="(_, idx) in formState.inputItems"
-                :key="idx"
-                align="center"
-                class="pl-8"
-                justify="center"
-              >
-                <v-col class="pa-0">
-                  <v-text-field
-                    v-model="formState.inputItems[idx].key"
-                    :label="$t('Key')"
-                    required
-                    :rules="individualInputKeyRules"
-                    variant="outlined"
-                    @update:model-value="onInputItemsChange"
-                  />
-                </v-col>
-                <v-col class="ml-5 pa-0">
-                  <v-text-field
-                    v-model="
-                      formState.inputItems[idx].value
-                    "
-                    :label="$t('Value')"
-                    required
-                    variant="outlined"
-                    @update:model-value="onInputItemsChange"
-                  />
-                </v-col>
-                <v-btn
-                  class="icon-btn mb-6 ml-5 mt-1"
-                  color="error"
-                  density="compact"
-                  icon="mdi-minus-circle"
-                  variant="text"
-                  @click="removeInputItem(idx)"
-                />
-              </v-row>
-            </v-col>
+            <output-items
+              :form-state="formState"
+              @output-change="changeOutputItems"
+            />
+            <input-items
+              :form-state="formState"
+              @input-change="changeInputItems"
+            />
           </v-row>
         </v-window-item>
 
@@ -195,6 +108,8 @@ import {
     isJsonString,
     objectContainsUniqueKeys,
 } from "@/utils/formRules";
+import OutputItems from "./OutputItems.vue";
+import InputItems from "./InputItems.vue";
 
 const tab = ref(null);
 const props = defineProps({
@@ -228,8 +143,19 @@ watch(props, () => {
         formState.name = name;
         file.value = file_name;
         onOutputChange();
+        onInputChange();
     }
 });
+
+const changeOutputItems = (output) => {
+    formState.output = output;
+    onOutputChange();
+};
+
+const changeInputItems = (input) => {
+    formState.input = input;
+    onInputChange();
+};
 
 const onOutputChange = (_) => {
     try {
@@ -264,57 +190,6 @@ const onInputChange = (_) => {
     }
 };
 
-const onOutputItemsChange = (_) => {
-    let output = "[";
-    for (let i = 0; i < formState.outputItems.length; i++) {
-        if (i !== 0) {
-            output += ", ";
-        }
-        output += `"${escapeQuotes(formState.outputItems[i])}"`;
-    }
-    output += "]";
-    formState.output = output;
-};
-
-const onInputItemsChange = (_) => {
-    let input = "{";
-    for (let i = 0; i < formState.inputItems.length; i++) {
-        if (i !== 0) {
-            input += ", ";
-        }
-        input += `"${escapeQuotes(
-            formState.inputItems[i].key
-        )}": "${escapeQuotes(formState.inputItems[i].value)}"`;
-    }
-    input += "}";
-    formState.input = input;
-};
-
-const escapeQuotes = (string) => {
-    if (typeof string === "string") {
-        return string.replaceAll('"', '\\"');
-    }
-
-    return string;
-};
-
-const removeOutputItem = (idx) => {
-    formState.outputItems.splice(idx, 1);
-    onOutputItemsChange();
-};
-
-const addOutputItem = () => {
-    formState.outputItems.push("");
-};
-
-const addInputItem = () => {
-    formState.inputItems.push({ key: "", value: "" });
-};
-
-const removeInputItem = (idx) => {
-    formState.inputItems.splice(idx, 1);
-};
-
 defineExpose({
     form,
     formState,
@@ -344,21 +219,9 @@ const inputRules = [
         objectContainsUniqueKeys(value) ||
         trans("ExperimentInputUniqueKeyError"),
 ];
-
-const individualOutputRules = [
-    (value) =>
-        formState.outputItems.filter((v) => v === value).length === 1 ||
-        trans("ExperimentOutputUniqueStringError"),
-];
-
-const individualInputKeyRules = [
-    (value) =>
-        formState.inputItems.filter((v) => v.key === value).length === 1 ||
-        trans("ExperimentInputUniqueKeyError"),
-];
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .form-item {
     min-width: 300px;
 
