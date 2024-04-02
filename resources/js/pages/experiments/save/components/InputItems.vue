@@ -2,7 +2,7 @@
   <v-col class="form-item">
     <v-row
       align="center"
-      class="pl-8"
+      class="pl-10"
       justify="space-between"
     >
       <div class="text-h6">
@@ -21,7 +21,7 @@
       v-for="(_, idx) in inputItems"
       :key="idx"
       align="center"
-      class="pl-8"
+      class="pl-10"
       justify="center"
     >
       <v-col class="pa-0">
