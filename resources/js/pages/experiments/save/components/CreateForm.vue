@@ -18,7 +18,7 @@
           :label="$t('SaveExperiment')"
         />
       </v-row>
-      <v-row dense>
+      <v-row>
         <v-col class="form-item">
           <v-text-field
             v-model="formState.name"
