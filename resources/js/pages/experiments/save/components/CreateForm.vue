@@ -58,13 +58,13 @@
       <v-window v-model="tab">
         <v-window-item value="individual">
           <v-row class="mt-2">
-            <output-items
-              :form-state="formState"
-              @output-change="changeOutputItems"
-            />
             <input-items
               :form-state="formState"
               @input-change="changeInputItems"
+            />
+            <output-items
+              :form-state="formState"
+              @output-change="changeOutputItems"
             />
           </v-row>
         </v-window-item>
@@ -73,22 +73,22 @@
           <v-row class="mt-2">
             <v-col class="form-item">
               <v-textarea
-                v-model="formState.output"
-                :label="$t('ExperimentOutput')"
-                prepend-icon="mdi-code-brackets"
-                :rules="outputRules"
-                variant="outlined"
-                @update:model-value="onOutputChange"
-              />
-            </v-col>
-            <v-col class="form-item">
-              <v-textarea
                 v-model="formState.input"
                 :label="$t('ExperimentContext')"
                 prepend-icon="mdi-code-json"
                 :rules="inputRules"
                 variant="outlined"
                 @update:model-value="onInputChange"
+              />
+            </v-col>
+            <v-col class="form-item">
+              <v-textarea
+                v-model="formState.output"
+                :label="$t('ExperimentOutput')"
+                prepend-icon="mdi-code-brackets"
+                :rules="outputRules"
+                variant="outlined"
+                @update:model-value="onOutputChange"
               />
             </v-col>
           </v-row>
