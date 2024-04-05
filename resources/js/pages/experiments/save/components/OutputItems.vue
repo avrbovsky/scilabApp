@@ -5,7 +5,7 @@
       class="pl-10"
       justify="space-between"
     >
-      <div class="text-h6">
+      <div class="mb-4 text-h6">
         {{ $t("ExperimentOutputs") }}:
       </div>
       <v-btn
