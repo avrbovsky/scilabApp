@@ -39,6 +39,7 @@
           v-model="inputItems[idx].value"
           :label="$t('Value')"
           required
+          :rules="individualInputValueRules"
           variant="outlined"
           @update:model-value="onInputItemsChange"
         />
@@ -58,6 +59,7 @@
 <script setup>
 import { trans } from "laravel-vue-i18n";
 import { ref, watch } from "vue";
+import { isMatlabVectorCharacters } from "@/utils/formRules";
 
 const inputItems = ref([{ key: "", value: "" }]);
 const emit = defineEmits(["input-change"]);
@@ -84,17 +86,32 @@ const onInputItemsChange = (_) => {
         if (i !== 0) {
             input += ", ";
         }
-        input += `"${escapeQuotes(inputItems.value[i].key)}": "${escapeQuotes(
-            inputItems.value[i].value
-        )}"`;
+        input += `"${escapeQuotes(
+            inputItems.value[i].key
+        )}": "${escapeValueCharacters(inputItems.value[i].value)}"`;
     }
     input += "}";
     emit("input-change", input);
 };
 
+const escapeValueCharacters = (string) => {
+    const escapedBackslash = escapeBackslash(string);
+    const escapedQuotes = escapeQuotes(escapedBackslash);
+
+    return escapedQuotes;
+};
+
 const escapeQuotes = (string) => {
     if (typeof string === "string") {
         return string.replaceAll('"', '\\"');
+    }
+
+    return string;
+};
+
+const escapeBackslash = (string) => {
+    if (typeof string === "string") {
+        return string.replaceAll("\\", "\\\\");
     }
 
     return string;
@@ -113,5 +130,10 @@ const individualInputKeyRules = [
     (value) =>
         inputItems.value.filter((v) => v.key === value).length === 1 ||
         trans("ExperimentInputUniqueKeyError"),
+];
+
+const individualInputValueRules = [
+    (value) =>
+        isMatlabVectorCharacters(value) || trans("ExperimentInputValueError"),
 ];
 </script>
