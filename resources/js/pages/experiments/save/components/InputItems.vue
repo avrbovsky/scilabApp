@@ -60,6 +60,7 @@
 import { trans } from "laravel-vue-i18n";
 import { ref, watch } from "vue";
 import { isMatlabVectorCharacters } from "@/utils/formRules";
+import { escapeCharacters } from "../utils/escapeUtils";
 
 const inputItems = ref([{ key: "", value: "" }]);
 const emit = defineEmits(["input-change"]);
@@ -86,35 +87,12 @@ const onInputItemsChange = (_) => {
         if (i !== 0) {
             input += ", ";
         }
-        input += `"${escapeQuotes(
+        input += `"${escapeCharacters(
             inputItems.value[i].key
-        )}": "${escapeValueCharacters(inputItems.value[i].value)}"`;
+        )}": "${escapeCharacters(inputItems.value[i].value)}"`;
     }
     input += "}";
     emit("input-change", input);
-};
-
-const escapeValueCharacters = (string) => {
-    const escapedBackslash = escapeBackslash(string);
-    const escapedQuotes = escapeQuotes(escapedBackslash);
-
-    return escapedQuotes;
-};
-
-const escapeQuotes = (string) => {
-    if (typeof string === "string") {
-        return string.replaceAll('"', '\\"');
-    }
-
-    return string;
-};
-
-const escapeBackslash = (string) => {
-    if (typeof string === "string") {
-        return string.replaceAll("\\", "\\\\");
-    }
-
-    return string;
 };
 
 const addInputItem = () => {
