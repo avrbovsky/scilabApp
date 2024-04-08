@@ -65,6 +65,7 @@ import { useAuthStore } from "@/stores/Auth";
 import { useNotificationStore } from "@/stores/NotificationService";
 import { useWindowSize } from "@vueuse/core";
 import { trans } from "laravel-vue-i18n";
+import { SHA256 } from "crypto-js";
 
 const { width } = useWindowSize();
 const router = useRouter();
@@ -89,9 +90,10 @@ const onSubmit = async () => {
     }
 
     try {
+        const hashedPassword = SHA256(formState.password).toString();
         const { data: userData } = await mutateAsync({
             email: formState.email,
-            password: formState.password,
+            password: hashedPassword,
         });
 
         signIn(userData.user, userData.token);
