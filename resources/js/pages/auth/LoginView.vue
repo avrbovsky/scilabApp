@@ -64,6 +64,7 @@ import { useSignInMutation } from "@/api/queries/authQueries";
 import { useAuthStore } from "@/stores/Auth";
 import { useNotificationStore } from "@/stores/NotificationService";
 import { useWindowSize } from "@vueuse/core";
+import { trans } from "laravel-vue-i18n";
 
 const { width } = useWindowSize();
 const router = useRouter();
@@ -75,8 +76,8 @@ const formState = reactive({
     email: "",
     password: "",
 });
-const emailRules = [(value) => !!value || "Email is required"];
-const passwordRules = [(value) => !!value || "Password is required"];
+const emailRules = [(value) => !!value || trans("EmailRequired")];
+const passwordRules = [(value) => !!value || trans("PasswordRequired")];
 
 const { mutateAsync, isLoading } = useSignInMutation();
 
