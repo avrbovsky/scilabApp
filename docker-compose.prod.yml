@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  scilab:
+  scilab-prod:
     build:
       context: .
       dockerfile: docker/prod/Dockerfile
