@@ -11,7 +11,6 @@ RUN apt install -y php8.2\
     php8.2-cli\
     php8.2-common\
     php8.2-fpm\
-    php8.2-mysql\
     php8.2-zip\
     php8.2-gd\
     php8.2-mbstring\
@@ -65,12 +64,14 @@ RUN composer install --no-progress --no-interaction \
     && php artisan key:generate --force
 
 RUN npm install \
-    && npm run build
+    && npm run build --base=/public/build/
 
 # Install and setup Nginx
 RUN apt install nginx -y
 COPY ./docker/prod/scilabApp.conf /etc/nginx/sites-available/scilabApp.conf
-RUN ln -s /etc/nginx/sites-available/scilabApp.conf /etc/nginx/sites-enabled/
+RUN ln -s /etc/nginx/sites-available/scilabApp.conf /etc/nginx/sites-enabled/ \
+    && cp ./docker/prod/certificates/webte_fei_stuba_sk.pem /etc/ssl/certs/ \
+    && cp ./docker/prod/certificates/webte.fei.stuba.sk.key /etc/ssl/private/
 
 # Setup php-fpm
 RUN mkdir -p /run/php/ \
