@@ -17,7 +17,8 @@ RUN apt install -y php8.2\
     php8.2-curl\
     php8.2-xml\
     php8.2-bcmath\
-    php8.2-pdo
+    php8.2-pdo\
+    php8.2-mysql
 
 # Install composer for Laravel
 RUN apt install -y curl && \
@@ -60,11 +61,10 @@ RUN mkdir -p storage/app/experiment_files \
     && chown -R www-data:www-data storage/app/experiment_files
 
 # Insall php dependencies and run php artisan basic actions
-RUN composer install --no-progress --no-interaction \
-    && php artisan key:generate --force
+RUN composer install --no-progress --no-interaction
 
 RUN npm install \
-    && npm run build --base=/public/build/
+    && npm run build
 
 # Install and setup Nginx
 RUN apt install nginx -y

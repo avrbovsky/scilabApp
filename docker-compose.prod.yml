@@ -7,6 +7,7 @@ services:
       dockerfile: docker/prod/Dockerfile
     volumes:
       - experimentfiles:/var/www/scilabApp/storage/app/experiment_files
+      - phpmyadmindata:/var/www/phpmyadmin
     environment:
       - APP_ENV=production
     restart: always
@@ -34,7 +35,19 @@ services:
       interval: 5s
       retries: 10
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5-fpm-alpine
+    environment:
+      PMA_HOST: mysql
+    volumes:
+      - phpmyadmindata:/var/www/html
+    depends_on:
+      database:
+        condition: service_healthy
+
 volumes:
   experimentfiles:
 
   mysqldata:
+
+  phpmyadmindata:

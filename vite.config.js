@@ -11,7 +11,6 @@ export default defineConfig(({ mode }) => {
     const host = "site19.webte.fei.stuba.sk";
 
     return {
-        define: { "process.env": {} },
         plugins: [
             vue({
                 template: {
@@ -47,7 +46,7 @@ export default defineConfig(({ mode }) => {
                     "./docker/prod/certificates/webte.fei.stuba.sk.key"
                 ),
             },
-            hmr: !isProduction ? { port: 3000 } : undefined,
+            hmr: isProduction ? false : { port: 3000 },
         },
         base: "./",
     };
