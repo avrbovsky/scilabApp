@@ -47,6 +47,7 @@ export default defineConfig(({ mode }) => {
                     "./docker/prod/certificates/webte.fei.stuba.sk.key"
                 ),
             },
+            hmr: !isProduction ? { port: 3000 } : undefined,
         },
         base: "./",
     };
