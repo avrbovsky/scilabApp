@@ -43,12 +43,8 @@ RUN cd /tmp \
     && rm scilab-6.0.2.bin.linux-x86_64.tar.gz \
     && mkdir -p /scripts
 
-# Copy run-script for executing scilab simulations
-COPY docker/run-script.sh /scripts/
-
 # Add permissions for running script
-RUN chown -R root:root /root/ \
-    && chmod +x /scripts/run-script.sh
+RUN chown -R root:root /root/
 
 RUN mkdir scilabApp
 
@@ -78,7 +74,8 @@ RUN mkdir -p /run/php/ \
     && chown www-data:www-data /run/php/ \
     && chmod 755 /run/php/
 
-RUN chmod +x docker/prod/entrypoint.sh
+RUN chmod +x docker/prod/entrypoint.sh \
+    && chmod +x docker/run-script.sh
 
 EXPOSE 80
 ENTRYPOINT [ "/bin/bash", "-c" ]
