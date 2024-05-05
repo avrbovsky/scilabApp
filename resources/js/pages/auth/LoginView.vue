@@ -32,6 +32,7 @@
               <v-spacer />
               <v-col class="no-grow pb-0">
                 <v-btn
+                  :disabled="isLoading"
                   :size="width < 600 ? 'small' : 'default'"
                   variant="outlined"
                   @click="onCreateAccountPressed"
