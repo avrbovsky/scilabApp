@@ -83,6 +83,7 @@ const removeOutputItem = (idx) => {
 
 const addOutputItem = () => {
     outputItems.value.push("");
+    onOutputItemsChange();
 };
 
 const individualOutputRules = [

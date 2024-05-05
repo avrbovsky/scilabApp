@@ -319,11 +319,7 @@ const createExperiment = async (isSave) => {
 
 <style lang="scss">
 .form-item {
-    min-width: 300px;
-
-    @media (min-width: 600px) {
-        min-width: 380px;
-    }
+    min-width: 400px;
 
     :deep(.v-field__input) {
         padding: 8px 16px;
