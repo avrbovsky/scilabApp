@@ -38,6 +38,6 @@ class ExperimentService
             }
         }
 
-        return $result_array;
+        return count($result_array) > 1 ? $result_array : [];
     }
 }

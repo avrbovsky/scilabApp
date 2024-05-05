@@ -294,6 +294,10 @@ const createExperiment = async (isSave) => {
                 : trans("ExperimentCreateSuccess");
             showSnackbar(snackbarMessage, "success");
 
+            if (data.simulation.length == 0) {
+                showSnackbar(trans("ExperimentSimulationError"), "error");
+            }
+
             if (isSave) {
                 resetFormDefaultValues();
                 form.value.resetValidation();
