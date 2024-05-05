@@ -71,17 +71,6 @@
                 </v-btn>
               </v-col>
             </v-row>
-            <v-snackbar
-              v-model="snackbar"
-              color="error"
-              rounded="pill"
-              :timeout="2000"
-            >
-              {{
-                error?.response?.data?.message ||
-                  "Error ocurred"
-              }}
-            </v-snackbar>
           </v-form>
         </v-container>
       </v-card-text>
@@ -150,8 +139,17 @@ const onSubmit = async () => {
 
         router.push("/");
     } catch (err) {
-        console.error(err);
-        showSnackbar(err?.response?.data?.message || "Error ocurred", "error");
+        if (err?.response?.data?.errors) {
+            showSnackbar(
+                Object.values(err?.response?.data?.errors)[0][0],
+                "error"
+            );
+        } else {
+            showSnackbar(
+                err?.response?.data?.message || "Error ocurred",
+                "error"
+            );
+        }
     }
 };
 </script>
