@@ -30,6 +30,7 @@
         :items="experimentsMapped"
         :items-length="totalItems"
         :loading="isPending"
+        :mobile="false"
         @click:row="onRowClick"
         @update:options="loadItems"
       >
@@ -84,7 +85,7 @@
             v-else
             :key="i"
             class="cursor-pointer"
-            @click.stop="onRowClick(i, { item: item.raw })"
+            @click.stop="() => console.log(width)"
           >
             <td>
               <ul class="mobile-grid-content">
