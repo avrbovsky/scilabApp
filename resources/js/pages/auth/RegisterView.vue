@@ -15,7 +15,7 @@
             <v-text-field
               id="username"
               v-model="formState.username"
-              :label="$t('Username')"
+              :label="$t('FullName')"
               name="username"
               prepend-icon="mdi-account"
               :rules="usernameRules"
@@ -110,7 +110,7 @@ const formState = reactive({
     password: "",
     passwordRepeat: "",
 });
-const usernameRules = [(value) => !!value || trans("UsernameRequired")];
+const usernameRules = [(value) => !!value || trans("FullNameRequired")];
 const emailRules = [
     (value) => !!value || trans("EmailRequired"),
     (value) => /.+@.{2,}\..{2,3}$/.test(value) || trans("EmailValid"),
