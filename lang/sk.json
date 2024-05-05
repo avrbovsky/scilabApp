@@ -57,5 +57,6 @@
     "GraphTab": "Graf",
     "JSONTab": "JSON",
     "Key": "Kľúč",
-    "Value": "Hodnota"
+    "Value": "Hodnota",
+    "SearchExperiment": "Hľadaj podľa názvu experimentu..."
 }

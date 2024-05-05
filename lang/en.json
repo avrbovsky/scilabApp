@@ -57,5 +57,6 @@
     "GraphTab": "Graph",
     "JSONTab": "JSON",
     "Key": "Key",
-    "Value": "Value"
+    "Value": "Value",
+    "SearchExperiment": "Search by experiment name..."
 }
