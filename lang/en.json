@@ -54,6 +54,8 @@
     "ExperimentObjects": "Objects",
     "ExperimentOutputs": "Outputs",
     "ExperimentInputs": "Inputs",
+    "GraphTab": "Graph",
+    "JSONTab": "JSON",
     "Key": "Key",
     "Value": "Value"
 }

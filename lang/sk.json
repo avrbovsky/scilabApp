@@ -54,6 +54,8 @@
     "ExperimentObjects": "Objekty",
     "ExperimentOutputs": "Výstupy",
     "ExperimentInputs": "Vstupy",
+    "GraphTab": "Graf",
+    "JSONTab": "JSON",
     "Key": "Kľúč",
     "Value": "Hodnota"
 }

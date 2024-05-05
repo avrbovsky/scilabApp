@@ -92,6 +92,7 @@
         <v-spacer />
         <v-col class="no-grow pb-0">
           <v-btn
+            :size="width < 650 ? 'small' : 'default'"
             variant="elevated"
             @click="onSimulateClicked"
           >
@@ -100,6 +101,7 @@
         </v-col>
         <v-col class="no-grow">
           <v-btn
+            :size="width < 650 ? 'small' : 'default'"
             variant="elevated"
             @click="onSaveClicked"
           >
@@ -113,6 +115,7 @@
         justify="end"
       >
         <v-btn
+          :size="width < 650 ? 'small' : 'default'"
           variant="elevated"
           @click="onSimulateClicked"
         >
@@ -135,11 +138,11 @@ import {
 } from "@/utils/formRules";
 import OutputItems from "./OutputItems.vue";
 import InputItems from "./InputItems.vue";
-// import { useWindowSize } from "@vueuse/core";
+import { useWindowSize } from "@vueuse/core";
 import { useNotificationStore } from "@/stores/NotificationService";
 import { useRoute } from "vue-router";
 
-// const { width } = useWindowSize();
+const { width } = useWindowSize();
 const { showSnackbar } = useNotificationStore();
 const tab = ref(null);
 const props = defineProps({
