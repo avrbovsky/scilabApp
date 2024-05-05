@@ -207,7 +207,7 @@ const changeOutputItems = (output) => {
 };
 
 const changeInputItems = (input) => {
-    formState.input = input;
+    formState.input = JSON.stringify(JSON.parse(input));
     onInputChange();
 };
 

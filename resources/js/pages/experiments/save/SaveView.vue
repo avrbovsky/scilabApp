@@ -22,7 +22,10 @@
         :save-experiment="saveExperiment"
         @simulation-data-change="onSimulationDataChanged"
       />
-      <v-container fluid>
+      <v-container
+        class="mt-4 pa-0"
+        fluid
+      >
         <graph-component
           :data="graphData"
           :loading="isPending"
