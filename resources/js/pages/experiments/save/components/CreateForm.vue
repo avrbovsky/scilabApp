@@ -7,17 +7,6 @@
       class="ma-0 pa-0"
       fluid
     >
-      <v-row
-        v-if="!experiment"
-        class="px-2"
-      >
-        <v-switch
-          v-model="formState.save"
-          color="primary"
-          inset
-          :label="$t('SaveExperiment')"
-        />
-      </v-row>
       <v-row>
         <v-col class="form-item">
           <v-text-field
@@ -94,6 +83,42 @@
           </v-row>
         </v-window-item>
       </v-window>
+      <v-row
+        v-if="!experiment"
+        class="px-2"
+        dense
+        justify="end"
+      >
+        <v-spacer />
+        <v-col class="no-grow pb-0">
+          <v-btn
+            variant="elevated"
+            @click="onSimulateClicked"
+          >
+            {{ $t("Simulate") }}
+          </v-btn>
+        </v-col>
+        <v-col class="no-grow">
+          <v-btn
+            variant="elevated"
+            @click="onSaveClicked"
+          >
+            {{ $t("SaveExperiment") }}
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-row
+        v-else
+        class="px-2"
+        justify="end"
+      >
+        <v-btn
+          variant="elevated"
+          @click="onSimulateClicked"
+        >
+          {{ $t("SaveExperiment") }}
+        </v-btn>
+      </v-row>
     </v-container>
   </v-form>
 </template>
@@ -110,7 +135,12 @@ import {
 } from "@/utils/formRules";
 import OutputItems from "./OutputItems.vue";
 import InputItems from "./InputItems.vue";
+// import { useWindowSize } from "@vueuse/core";
+import { useNotificationStore } from "@/stores/NotificationService";
+import { useRoute } from "vue-router";
 
+// const { width } = useWindowSize();
+const { showSnackbar } = useNotificationStore();
 const tab = ref(null);
 const props = defineProps({
     loading: {
@@ -121,11 +151,16 @@ const props = defineProps({
         type: Object,
         default: undefined,
     },
+    saveExperiment: {
+        type: Function,
+        required: true,
+    },
 });
+const route = useRoute();
+const isEditView = ref(route.path.includes("edit"));
 
 const form = ref(null);
 const formState = reactive({
-    save: false,
     name: "",
     file: undefined,
     output: "[]",
@@ -134,6 +169,12 @@ const formState = reactive({
     inputItems: [{ key: "", value: "" }],
 });
 const file = ref("");
+
+watch(route, () => {
+    resetFormDefaultValues();
+    file.value = "";
+    form.value.resetValidation();
+});
 
 watch(props, () => {
     if (props.experiment && props.loading === false) {
@@ -146,6 +187,16 @@ watch(props, () => {
         onInputChange();
     }
 });
+
+const resetFormDefaultValues = () => {
+    formState.save = false;
+    formState.name = "";
+    formState.file = undefined;
+    formState.output = "[]";
+    formState.input = "{}";
+    formState.outputItems = [""];
+    formState.inputItems = [{ key: "", value: "" }];
+};
 
 const changeOutputItems = (output) => {
     formState.output = output;
@@ -190,12 +241,6 @@ const onInputChange = (_) => {
     }
 };
 
-defineExpose({
-    form,
-    formState,
-    file,
-});
-
 const nameRules = [
     (value) => !formState.save || !!value || trans("ExperimentNameError"),
 ];
@@ -219,6 +264,50 @@ const inputRules = [
         objectContainsUniqueKeys(value) ||
         trans("ExperimentInputUniqueKeyError"),
 ];
+
+const emit = defineEmits(["simulation-data-change"]);
+
+const onSimulateClicked = () => {
+    createExperiment(false);
+};
+
+const onSaveClicked = () => {
+    createExperiment(true);
+};
+
+const createExperiment = async (isSave) => {
+    const { valid: isValid } = await form.value.validate();
+    if (isValid) {
+        try {
+            emit("simulation-data-change", { data: { simulation: [] } });
+            const { data } = await props.saveExperiment({
+                id: route.params.id,
+                name: formState.name,
+                file: formState.file || undefined,
+                context: formState.input,
+                output: formState.output,
+                save: isSave,
+            });
+
+            const snackbarMessage = isEditView.value
+                ? trans("ExperimentEditSuccess")
+                : trans("ExperimentCreateSuccess");
+            showSnackbar(snackbarMessage, "success");
+
+            if (isSave) {
+                resetFormDefaultValues();
+                form.value.resetValidation();
+            }
+            emit("simulation-data-change", { data });
+        } catch (err) {
+            console.log(err);
+            const snackbarMessage = isEditView.value
+                ? trans("ExperimentEditError")
+                : trans("ExperimentCreateError");
+            showSnackbar(snackbarMessage, "error");
+        }
+    }
+};
 </script>
 
 <style lang="scss">
@@ -253,5 +342,9 @@ const inputRules = [
     .v-row {
         margin: 0px;
     }
+}
+
+.no-grow {
+    flex-grow: 0;
 }
 </style>
