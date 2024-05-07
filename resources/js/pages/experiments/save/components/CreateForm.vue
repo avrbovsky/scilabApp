@@ -76,7 +76,6 @@
                 prepend-icon="mdi-code-brackets"
                 :rules="outputRules"
                 variant="outlined"
-                @update:model-value="onOutputChange"
               />
             </v-col>
           </v-row>
@@ -167,7 +166,6 @@ const formState = reactive({
     file: undefined,
     output: "[]",
     input: "{}",
-    outputItems: [""],
 });
 const file = ref("");
 
@@ -193,32 +191,14 @@ const resetFormDefaultValues = () => {
     formState.file = undefined;
     formState.output = "[]";
     formState.input = "{}";
-    formState.outputItems = [""];
 };
 
 const changeOutputItems = (output) => {
     formState.output = output;
-    onOutputChange();
 };
 
 const changeInputItems = (input) => {
     formState.input = JSON.stringify(JSON.parse(input));
-};
-
-const onOutputChange = (_) => {
-    try {
-        const outputArray = JSON.parse(formState.output);
-
-        if (
-            outputArray &&
-            typeof outputArray === "object" &&
-            Array.isArray(outputArray)
-        ) {
-            formState.outputItems = outputArray;
-        }
-    } catch (e) {
-        formState.outputItems = [""];
-    }
 };
 
 const nameRules = [
