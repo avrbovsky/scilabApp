@@ -198,7 +198,7 @@ const changeOutputItems = (output) => {
 };
 
 const changeInputItems = (input) => {
-    formState.input = JSON.stringify(JSON.parse(input));
+    formState.input = input;
 };
 
 const nameRules = [

@@ -32,7 +32,7 @@
             required
             :rules="individualInputKeyRules"
             variant="outlined"
-            @update:model-value="onInputItemsChange"
+            @update:focused="onInputItemsChange"
           />
         </v-col>
         <v-col class="ml-5 pa-0">
@@ -151,7 +151,7 @@ const onInputItemsChange = (_) => {
         )}": "${escapeCharacters(inputItems.value[i].value)}"`;
     }
     input += "}";
-    emit("input-change", input);
+    emit("input-change", JSON.stringify(JSON.parse(input)));
 };
 
 const addInputItem = () => {

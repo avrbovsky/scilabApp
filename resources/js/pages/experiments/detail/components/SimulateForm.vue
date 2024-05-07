@@ -6,13 +6,37 @@
     validate-on="submit"
     @submit.prevent="onSubmit"
   >
-    <v-textarea
-      v-model="experimentInput"
-      :label="$t('ExperimentContext')"
-      prepend-icon="mdi-code-json"
-      :rules="inputRules"
-      variant="outlined"
-    />
+    <v-tabs v-model="tab">
+      <v-tab value="individual">
+        {{ $t("ExperimentIndividualItems") }}
+      </v-tab>
+      <v-tab value="object">
+        {{ $t("ExperimentObjects") }}
+      </v-tab>
+    </v-tabs>
+    <v-window v-model="tab">
+      <v-window-item value="individual">
+        <v-row class="mt-2">
+          <input-items
+            :form-state="formState"
+            @input-change="changeInputItems"
+          />
+        </v-row>
+      </v-window-item>
+      <v-window-item value="object">
+        <v-row class="mt-2">
+          <v-col>
+            <v-textarea
+              v-model="formState.input"
+              :label="$t('ExperimentContext')"
+              prepend-icon="mdi-code-json"
+              :rules="inputRules"
+              variant="outlined"
+            />
+          </v-col>
+        </v-row>
+      </v-window-item>
+    </v-window>
     <div class="d-flex justify-end">
       <v-btn
         :disabled="loading"
@@ -28,8 +52,9 @@
 <script setup>
 import { useWindowSize } from "@vueuse/core";
 import { trans } from "laravel-vue-i18n";
-import { ref, watch } from "vue";
+import { reactive, ref, watch } from "vue";
 import { isJsonString } from "@/utils/formRules";
+import InputItems from "../../components/InputItems.vue";
 
 const props = defineProps({
     submit: {
@@ -48,19 +73,24 @@ const props = defineProps({
 
 const { width } = useWindowSize();
 const form = ref(null);
-const experimentInput = ref("");
+const tab = ref(null);
+const formState = reactive({
+    input: "{}",
+});
 
-watch(props, (newVal, oldVal) => {
-    if (newVal.context !== oldVal.context || !experimentInput.value) {
-        experimentInput.value = props.context;
-    }
+watch(props, () => {
+    formState.input = props.context;
 });
 
 const inputRules = [
     (value) => isJsonString(value) || trans("ExperimentContextError"),
 ];
 
+const changeInputItems = (input) => {
+    formState.input = input;
+};
+
 const onSubmit = () => {
-    props.submit(experimentInput.value);
+    props.submit(formState.input);
 };
 </script>
