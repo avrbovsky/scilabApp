@@ -67,7 +67,6 @@
                 prepend-icon="mdi-code-json"
                 :rules="inputRules"
                 variant="outlined"
-                @update:model-value="onInputChange"
               />
             </v-col>
             <v-col class="form-item">
@@ -169,7 +168,6 @@ const formState = reactive({
     output: "[]",
     input: "{}",
     outputItems: [""],
-    inputItems: [{ key: "", value: "" }],
 });
 const file = ref("");
 
@@ -186,8 +184,6 @@ watch(props, () => {
         formState.output = output;
         formState.name = name;
         file.value = file_name;
-        onOutputChange();
-        onInputChange();
     }
 });
 
@@ -198,7 +194,6 @@ const resetFormDefaultValues = () => {
     formState.output = "[]";
     formState.input = "{}";
     formState.outputItems = [""];
-    formState.inputItems = [{ key: "", value: "" }];
 };
 
 const changeOutputItems = (output) => {
@@ -208,7 +203,6 @@ const changeOutputItems = (output) => {
 
 const changeInputItems = (input) => {
     formState.input = JSON.stringify(JSON.parse(input));
-    onInputChange();
 };
 
 const onOutputChange = (_) => {
@@ -224,23 +218,6 @@ const onOutputChange = (_) => {
         }
     } catch (e) {
         formState.outputItems = [""];
-    }
-};
-
-const onInputChange = (_) => {
-    try {
-        const inputObject = JSON.parse(formState.input);
-        const keys = Object.keys(inputObject);
-        const values = Object.values(inputObject);
-
-        const inputItems = [];
-        for (let i = 0; i < keys.length; i++) {
-            inputItems.push({ key: keys[i], value: values[i] });
-        }
-
-        formState.inputItems = inputItems;
-    } catch (e) {
-        formState.inputItems = [{ key: "", value: "" }];
     }
 };
 

@@ -120,12 +120,23 @@ const props = defineProps({
 });
 
 watch(props.formState, (newProps, _) => {
-    if (newProps.inputItems !== inputItems.value) {
-        if (newProps.inputItems.length === 0) {
+    try {
+        const inputObject = JSON.parse(newProps.input);
+        const keys = Object.keys(inputObject);
+        const values = Object.values(inputObject);
+
+        const tmpInputs = [];
+        for (let i = 0; i < keys.length; i++) {
+            tmpInputs.push({ key: keys[i], value: values[i] });
+        }
+
+        if (tmpInputs.length === 0) {
             inputItems.value = [{ key: "", value: "" }];
         } else {
-            inputItems.value = newProps.inputItems;
+            inputItems.value = tmpInputs;
         }
+    } catch (e) {
+        inputItems.value = [{ key: "", value: "" }];
     }
 });
 
