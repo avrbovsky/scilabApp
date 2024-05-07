@@ -134,8 +134,8 @@ import {
     isJsonString,
     objectContainsUniqueKeys,
 } from "@/utils/formRules";
-import OutputItems from "./OutputItems.vue";
-import InputItems from "./InputItems.vue";
+import OutputItems from "../../components/OutputItems.vue";
+import InputItems from "../../components/InputItems.vue";
 import { useWindowSize } from "@vueuse/core";
 import { useNotificationStore } from "@/stores/NotificationService";
 import { useRoute } from "vue-router";
