@@ -39,12 +39,12 @@
           <v-text-field
             v-model="searchName"
             append-inner-icon="mdi-magnify"
-            class="ma-4 search-input"
+            class="search-input"
             hide-details
             :placeholder="$t('SearchExperiment')"
           />
         </template>
-        <!-- CODE IS INSPIRED FROM JAKUB MATISAK -->
+        <!-- CODE IS INSPIRED BY JAKUB MATISAK -->
         <template
           v-if="width < 768"
           #headers="{ columns, isSorted, getSortIcon, toggleSort }"
@@ -162,7 +162,7 @@ const experimentsMapped = computed(() => {
         ...experiment,
         created_at: date.format(
             new Date(experiment.created_at),
-            "keyboardDate"
+            "keyboardDateTime"
         ),
         created_by: getCreatedBy(experiment.created_by),
     }));

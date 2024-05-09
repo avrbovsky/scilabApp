@@ -114,6 +114,11 @@ const xAxis = computed(() =>
 const options = computed(() => ({
     chart: {
         id: "scilab-simulation",
+        toolbar: {
+            tools: {
+                download: false,
+            },
+        },
     },
     xaxis: {
         type: "numeric",
