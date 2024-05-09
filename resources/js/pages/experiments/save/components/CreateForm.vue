@@ -228,10 +228,12 @@ const inputRules = [
 const emit = defineEmits(["simulation-data-change"]);
 
 const onSimulateClicked = () => {
+    formState.save = false;
     createExperiment(false);
 };
 
 const onSaveClicked = () => {
+    formState.save = true;
     createExperiment(true);
 };
 
