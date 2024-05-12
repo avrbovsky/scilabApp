@@ -94,16 +94,14 @@
             />
           </v-row>
         </v-col>
-        <v-col class="no-grow pb-0">
-          <v-btn
-            class="icon-btn mb-6 mt-1"
-            color="error"
-            density="compact"
-            icon="mdi-minus-circle"
-            variant="text"
-            @click="removeInputItem(idx)"
-          />
-        </v-col>
+        <v-btn
+          class="icon-btn mb-6 ml-4 mt-1"
+          color="error"
+          density="compact"
+          icon="mdi-minus-circle"
+          variant="text"
+          @click="removeInputItem(idx)"
+        />
         <v-divider class="pb-3" />
       </v-row>
     </div>
