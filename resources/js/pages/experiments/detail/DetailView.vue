@@ -50,32 +50,34 @@
       />
     </template>
     <v-card-text>
-      <v-container fluid>
-        <div class="d-flex">
+      <v-row>
+        <v-col>
           <div class="text-md-h4 text-sm-h5">
             {{ data?.experiment?.name }}
           </div>
-          <v-spacer />
+        </v-col>
+        <v-spacer />
+        <v-col>
           <div class="text-md-h5 text-sm-h6">
-            <span class="font-weight-thin">{{ $t("By") }}:</span>
+            <span class="font-weight-bold">{{ $t("By") }}:</span>
             <span>{{
               user?.user?.name || data?.experiment?.created_by
             }}</span>
           </div>
-        </div>
-        <v-divider />
-        <simulate-form
-          :context="data?.experiment?.context || ''"
+        </v-col>
+      </v-row>
+      <v-divider />
+      <simulate-form
+        :context="data?.experiment?.context || ''"
+        :loading="isPendingSimulation"
+        :submit="handleSubmit"
+      />
+      <div class="pt-2">
+        <graph-component
+          :data="graphData"
           :loading="isPendingSimulation"
-          :submit="handleSubmit"
         />
-        <v-container fluid>
-          <graph-component
-            :data="graphData"
-            :loading="isPendingSimulation"
-          />
-        </v-container>
-      </v-container>
+      </div>
     </v-card-text>
   </v-card>
 </template>

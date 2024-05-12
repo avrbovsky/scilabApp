@@ -6,7 +6,7 @@
   >
     <v-row
       align="center"
-      class="pl-10"
+      :class="{ 'pl-10': addPadding }"
       justify="space-between"
     >
       <div class="mb-4 text-h6">
@@ -26,7 +26,7 @@
         v-for="(_, idx) in inputItems"
         :key="idx"
         align="center"
-        class="pl-10"
+        :class="{ 'pl-10': addPadding }"
         justify="center"
       >
         <v-col class="pa-0">
@@ -66,7 +66,7 @@
         v-for="(_, idx) in inputItems"
         :key="idx"
         align="center"
-        class="pl-10"
+        :class="{ 'pl-10': addPadding }"
         dense
         justify="center"
       >
@@ -124,6 +124,10 @@ const props = defineProps({
     formState: {
         type: Object,
         required: true,
+    },
+    addPadding: {
+        type: Boolean,
+        default: false,
     },
 });
 
