@@ -1,5 +1,9 @@
 <template>
-  <v-col class="form-item">
+  <v-col
+    class="form-item"
+    cols="12"
+    md="6"
+  >
     <v-row
       align="center"
       class="pl-10"
@@ -28,6 +32,7 @@
         <v-col class="pa-0">
           <v-text-field
             v-model="inputItems[idx].key"
+            :density="width < 400 ? 'compact' : 'default'"
             :label="$t('Key')"
             required
             :rules="individualInputKeyRules"
@@ -38,6 +43,7 @@
         <v-col class="ml-5 pa-0">
           <v-text-field
             v-model="inputItems[idx].value"
+            :density="width < 400 ? 'compact' : 'default'"
             :label="$t('Value')"
             required
             :rules="individualInputValueRules"
@@ -68,6 +74,7 @@
           <v-row>
             <v-text-field
               v-model="inputItems[idx].key"
+              :density="width < 400 ? 'compact' : 'default'"
               :label="$t('Key')"
               required
               :rules="individualInputKeyRules"
@@ -78,6 +85,7 @@
           <v-row>
             <v-text-field
               v-model="inputItems[idx].value"
+              :density="width < 400 ? 'compact' : 'default'"
               :label="$t('Value')"
               required
               :rules="individualInputValueRules"
@@ -96,7 +104,7 @@
             @click="removeInputItem(idx)"
           />
         </v-col>
-        <v-divider />
+        <v-divider class="pb-3" />
       </v-row>
     </div>
   </v-col>

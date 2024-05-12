@@ -48,7 +48,7 @@ import {
 } from "@/api/queries/experimentQueries";
 
 const route = useRoute();
-const isEditView = ref(route.path.includes("edit"));
+const isEditView = computed(() => route.path.includes("edit"));
 const title = computed(() =>
     isEditView.value ? trans("EditExperiment") : trans("CreateExperiment")
 );
