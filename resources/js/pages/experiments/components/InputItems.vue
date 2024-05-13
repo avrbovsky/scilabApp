@@ -2,11 +2,11 @@
   <v-col
     class="form-item"
     cols="12"
-    md="6"
+    :md="isCreateForm ? 6 : 12"
   >
     <v-row
       align="center"
-      :class="{ 'pl-10': addPadding }"
+      :class="{ 'pl-10': isCreateForm }"
       justify="space-between"
     >
       <div class="mb-4 text-h6">
@@ -26,7 +26,7 @@
         v-for="(_, idx) in inputItems"
         :key="idx"
         align="center"
-        :class="{ 'pl-10': addPadding }"
+        :class="{ 'pl-10': isCreateForm }"
         justify="center"
       >
         <v-col class="pa-0">
@@ -66,7 +66,7 @@
         v-for="(_, idx) in inputItems"
         :key="idx"
         align="center"
-        :class="{ 'pl-10': addPadding }"
+        :class="{ 'pl-10': isCreateForm }"
         dense
         justify="center"
       >
@@ -110,10 +110,11 @@
 
 <script setup>
 import { trans } from "laravel-vue-i18n";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { isMatlabVectorCharacters } from "@/utils/formRules";
 import { escapeCharacters } from "../utils/escapeUtils";
 import { useWindowSize } from "@vueuse/core";
+import { useRoute } from "vue-router";
 
 const { width } = useWindowSize();
 const inputItems = ref([{ key: "", value: "" }]);
@@ -123,11 +124,11 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    addPadding: {
-        type: Boolean,
-        default: false,
-    },
 });
+const route = useRoute();
+const isCreateForm = computed(
+    () => route.path.includes("edit") || route.path.includes("add")
+);
 
 watch(props.formState, (newProps, _) => {
     try {

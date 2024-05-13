@@ -62,7 +62,6 @@
         <v-window-item value="individual">
           <v-row class="mt-2">
             <input-items
-              :add-padding="true"
               :form-state="formState"
               @input-change="changeInputItems"
             />
