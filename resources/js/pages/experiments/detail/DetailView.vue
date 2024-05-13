@@ -50,21 +50,17 @@
       />
     </template>
     <v-card-text>
-      <v-row>
-        <v-col>
-          <div class="text-md-h4 text-sm-h5">
-            {{ data?.experiment?.name }}
-          </div>
-        </v-col>
+      <v-row dense>
+        <div class="text-md-h4 text-sm-h5">
+          {{ data?.experiment?.name }}
+        </div>
         <v-spacer />
-        <v-col>
-          <div class="text-md-h5 text-sm-h6">
-            <span class="font-weight-bold">{{ $t("By") }}:</span>
-            <span>{{
-              user?.user?.name || data?.experiment?.created_by
-            }}</span>
-          </div>
-        </v-col>
+        <div class="text-md-h5 text-sm-h6">
+          <span class="font-weight-bold">{{ $t("By") }}:</span>
+          <span>{{
+            user?.user?.name || data?.experiment?.created_by
+          }}</span>
+        </div>
       </v-row>
       <v-divider />
       <simulate-form
