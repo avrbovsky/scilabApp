@@ -94,7 +94,7 @@ import {
 import { useUserDetailMutation } from "@/api/queries/userQueries";
 import { useNotificationStore } from "@/stores/NotificationService";
 import HeaderComponent from "../components/HeaderComponent.vue";
-import GraphComponent from "../components/GraphComponent.vue";
+import GraphComponent from "../components/graph/GraphComponent.vue";
 import { useAuthStore } from "@/stores/Auth";
 import { storeToRefs } from "pinia";
 import SimulateForm from "./components/SimulateForm.vue";

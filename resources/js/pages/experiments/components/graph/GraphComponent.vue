@@ -50,6 +50,20 @@
         </div>
       </v-window-item>
     </v-window>
+    <v-row
+      class="pt-4 px-2"
+      dense
+      justify="center"
+      justify-sm="end"
+    >
+      <v-btn
+        :disabled="data.length === 0"
+        variant="elevated"
+        @click="onExportCSVClick"
+      >
+        {{ $t("ExportCSV") }}
+      </v-btn>
+    </v-row>
   </div>
 </template>
 
@@ -57,6 +71,7 @@
 import { computed, ref } from "vue";
 import VueJsonPretty from "vue-json-pretty";
 import "vue-json-pretty/lib/styles.css";
+import { transformDataToCSVContent } from "./utils";
 
 const props = defineProps({
     data: {
@@ -136,6 +151,18 @@ const options = computed(() => ({
         },
     },
 }));
+
+const onExportCSVClick = () => {
+    const csvData = transformDataToCSVContent(props.data, true);
+    console.log(csvData);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "data.csv");
+    link.click();
+    link.remove();
+};
 </script>
 
 <style scoped>

@@ -40,7 +40,7 @@ import { trans } from "laravel-vue-i18n";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import CreateForm from "./components/CreateForm.vue";
-import GraphComponent from "../components/GraphComponent.vue";
+import GraphComponent from "../components/graph/GraphComponent.vue";
 import HeaderComponent from "../components/HeaderComponent.vue";
 import {
     useExperimentDetailMutation,
