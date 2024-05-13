@@ -11,35 +11,43 @@
     </v-tabs>
     <v-window v-model="tab">
       <v-window-item value="graph">
-        <div class="experiment-graf mt-4">
-          <apexchart
-            :options="options"
-            :series="dataSeries"
-            type="line"
-          />
-          <v-overlay
-            class="align-center justify-center rounded-lg"
-            :close-on-back="false"
-            contained
-            :model-value="showOverlay"
-            no-click-animation
-            persistent
+        <v-row
+          dense
+          justify="center"
+        >
+          <div
+            class="experiment-graf mt-4"
+            :style="{ 'max-width': `${(height - 304) * 1.5}px` }"
           >
-            <div
-              class="graph-no-data pa-4 rounded-lg text-md-h2 text-sm-h5"
+            <apexchart
+              :options="options"
+              :series="dataSeries"
+              type="line"
+            />
+            <v-overlay
+              class="align-center justify-center rounded-lg"
+              :close-on-back="false"
+              contained
+              :model-value="showOverlay"
+              no-click-animation
+              persistent
             >
-              <v-progress-circular
-                v-if="loading"
-                color="primary"
-                indeterminate
-                :size="45"
-              />
-              <span v-else>
-                {{ $t("GraphNoData") }}
-              </span>
-            </div>
-          </v-overlay>
-        </div>
+              <div
+                class="graph-no-data pa-4 rounded-lg text-md-h2 text-sm-h5"
+              >
+                <v-progress-circular
+                  v-if="loading"
+                  color="primary"
+                  indeterminate
+                  :size="45"
+                />
+                <span v-else>
+                  {{ $t("GraphNoData") }}
+                </span>
+              </div>
+            </v-overlay>
+          </div>
+        </v-row>
       </v-window-item>
       <v-window-item value="json">
         <div class="json">
@@ -72,6 +80,10 @@ import { computed, ref } from "vue";
 import VueJsonPretty from "vue-json-pretty";
 import "vue-json-pretty/lib/styles.css";
 import { transformDataToCSVContent } from "./utils";
+import { useWindowSize } from "@vueuse/core";
+
+const { height } = useWindowSize();
+console.log(height);
 
 const props = defineProps({
     data: {
@@ -168,6 +180,7 @@ const onExportCSVClick = () => {
 <style scoped>
 .experiment-graf {
     position: relative;
+    flex: 1;
 }
 
 .graph-no-data {
